@@ -1,0 +1,10 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@font-face {
+  font-family: 'AveriaSerifLibre';
+  src: url('/Assets/Fonts/AveriaSerifLibre-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}

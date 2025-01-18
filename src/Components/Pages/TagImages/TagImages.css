@@ -1,0 +1,45 @@
+.TagImages-content p {
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 24.7px;
+    color: white;
+}
+
+
+@media only screen and (max-width: 767px) {
+    .TagImages-content .popupbagde {
+        top: 0 !important;
+    }
+
+    .TagImages-content p {
+        font-size: 14px;
+        line-height: 18.9px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .TagImages-content p {
+        font-size: 14px;
+    }
+
+    .text-40 {
+        font-size: 26px !important;
+    }
+
+    .TagImages-content .popupbagde {
+        top: 75px !important;
+    }
+}
+
+@media only screen and (min-width: 1536px) {
+    .tag-images-gen {
+        max-height: 578px;
+        width: auto;
+    }
+
+    .TagImages-content p {
+        font-size: 22px;
+        line-height: 29.7px;
+    }
+}

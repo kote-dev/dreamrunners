@@ -1,0 +1,292 @@
+.SignIn {
+    background-image: url(../../../Assets/Images/BackgroundImages/group112-66350abf77a95.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    padding: 24px;
+
+}
+
+.SignUp {
+    background-image: url(../../../Assets/Images/BackgroundImages/group113-66350abe7474a.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    padding: 24px;
+}
+
+.title-form {
+    max-width: 716px;
+}
+
+.title-form h3 {
+    font-family: Satoshi-Black;
+    font-size: 32px;
+    color: #FFFFFF;
+}
+
+.form-para {
+
+    font-size: 16px;
+    color: #FFFFFF;
+    padding-top: 10px;
+    font-weight: 300;
+}
+
+.Form {
+    background-color: #3E4141;
+    width: auto;
+    padding: 22px 32px;
+    border-radius: 24px;
+
+}
+
+.Form h2 {
+    font-size: 32px;
+    color: #FFFFFF;
+    font-weight: 700;
+
+}
+
+.fp1 {
+    padding: 0px 0 24px;
+}
+
+.Form .input-custom {
+    height: 48px;
+    width: 100%;
+    background: #2C2E2E;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    padding: 16px;
+    color: white !important;
+    margin-bottom: 16px;
+}
+
+.Form .input-custom::placeholder {
+    color: #AEAEAE;
+    opacity: 1;
+    /* Ensures the color is fully opaque */
+}
+
+.Form .sub-button {
+    font-weight: 700;
+    font-size: 16px;
+    color: black;
+    height: 48px;
+    width: 100% !important;
+    border-radius: 8px;
+    border: none;
+    background: #F3F3F3;
+    cursor: pointer;
+}
+
+.checkbox-div>div {
+    display: flex;
+    gap: 8px;
+}
+
+.checkbox-div label {
+    font-family: Satoshi-Regular !important;
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 500;
+    padding: 0;
+}
+
+.forget-btn {
+    background: transparent;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.horizontal-dir hr {
+    border: 2px solid #656565;
+    padding: 0;
+    width: 100%;
+}
+
+.horizontal-dir p {
+
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-align: center;
+    padding: 0 !important;
+    color: white;
+    width: 400px;
+}
+
+.notice-text {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24.3px;
+    color: white;
+    padding: 0 0 24px;
+}
+
+@media only screen and (max-width: 767px) {
+    .notice-text {
+        color: #AEAEAE;
+        padding: 0 0 32px;
+        font-size: 13px;
+        line-height: 17px;
+    }
+
+    .SignIn,
+    .SignUp {
+        background: #414545;
+        height: 100vh;
+        padding: 24px;
+
+    }
+
+    .logo {
+        max-width: 276px;
+        height: auto;
+        margin: auto;
+
+    }
+
+    .Form {
+        background: transparent;
+        padding: 22px 0px;
+        border-radius: 0;
+
+    }
+
+    .Form h2 {
+
+        font-weight: 700;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 43.2px;
+
+    }
+
+    .Form p {
+
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24.3px;
+
+    }
+
+    .Form .input-custom {
+        height: 56px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #AEAEAE;
+    }
+
+    .checkbox-div label {
+        font-size: 16px;
+    }
+
+    .sm-font-16 {
+        font-size: 16px !important;
+
+    }
+
+}
+
+@media only screen and (min-width: 641px) and (max-width: 1023px) {
+    .logo {
+        max-width: 273px;
+        /* margin-bottom: 60px; */
+    }
+
+    .title-form {
+        display: none;
+    }
+
+    .Form {
+        padding: 30px 44px;
+        border-radius: 24px;
+        max-width: 555px;
+        margin: 22% auto 0;
+    }
+}
+
+
+@media only screen and (min-width: 1696px) {
+    .SignIn {
+        padding: 40px 24px;
+
+    }
+
+    .SignUp {
+        padding: 40px 24px;
+    }
+
+    .Form {
+        width: 536px;
+        padding: 54px 40px;
+        border-radius: 24px;
+        height: auto;
+    }
+
+    .notice-text {
+        padding: 0 0 48px;
+        font-size: 18px;
+    }
+
+    .forget-btn {
+        font-weight: 700;
+    }
+
+    .Form .input-custom {
+        font-size: 18px;
+        height: 64px;
+    }
+
+    .Form .sub-button {
+        height: 64px;
+        font-size: 18px;
+    }
+
+    .Form h2 {
+        font-weight: 700;
+        font-size: 48px;
+        color: #FFFFFF;
+    }
+
+    .fp1 {
+        padding: 12px 0 68px;
+    }
+
+    .title-form {
+        max-width: 816px;
+    }
+
+    .title-form h3 {
+        font-size: 48px;
+    }
+
+    .form-para {
+        font-size: 24px;
+        padding-top: 24px;
+    }
+
+    .Form .input-custom {
+        height: 64px;
+        padding: 20px 16px;
+        margin-bottom: 24px;
+    }
+
+    .Form .sub-button {
+        height: 64px;
+    }
+
+    .tag-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tag-form button {
+        margin-top: auto;
+    }
+}

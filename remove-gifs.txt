@@ -1,0 +1,12 @@
+src/assets/images/tiers/Lair Common.gif
+src/assets/images/tiers/Lair Uncommon.gif
+src/assets/images/tiers/Lair Rare.gif
+src/assets/images/tiers/Lair Epic.gif
+src/assets/images/tiers/Lair Legendary.gif
+src/assets/images/tiers/Lair Oneiric.gif
+src/assets/images/tiers/optimized/Lair Common.gif
+src/assets/images/tiers/optimized/Lair Uncommon.gif
+src/assets/images/tiers/optimized/Lair Rare.gif
+src/assets/images/tiers/optimized/Lair Epic.gif
+src/assets/images/tiers/optimized/Lair Legendary.gif
+src/assets/images/tiers/optimized/Lair Oneiric.gif

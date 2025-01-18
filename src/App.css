@@ -1,0 +1,135 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Satoshi-Regular;
+}
+
+body {
+    background-color: #3B3F3F;
+}
+
+/* Font-Family */
+@font-face {
+    font-family: Vendeur Rough Demo;
+    src: url(/Assets/Fonts/Vendeur-Rough-Demo.otf);
+}
+
+@font-face {
+    font-family: Satoshi-Black;
+    src: url(/Assets/Fonts/OTF/Satoshi-Black.otf);
+}
+
+@font-face {
+    font-family: Satoshi-Regular;
+    src: url(/Assets/Fonts/OTF/Satoshi-Regular.otf);
+}
+
+@font-face {
+    font-family: 'AveriaSerifLibre-Bold';
+    src: url(/Assets/Fonts/AveriaSerifLibre-Bold.ttf);
+}
+
+@font-face {
+    font-family: 'AveriaSerifLibre-BoldItalic';
+    src: url(/Assets/Fonts/AveriaSerifLibre-BoldItalic.ttf);
+}
+
+@font-face {
+    font-family: 'AveriaSerifLibre-Light';
+    src: url(/Assets/Fonts/AveriaSerifLibre-Light.ttf);
+}
+
+@font-face {
+    font-family: 'AveriaSerifLibre-LightItalic';
+    src: url(/Assets/Fonts/AveriaSerifLibre-LightItalic.ttf);
+}
+
+@font-face {
+    font-family: 'AveriaSerifLibre-Regular';
+    src: url(/Assets/Fonts/AveriaSerifLibre-Regular.ttf);
+}
+
+.logo {
+    max-width: 293px;
+    height: auto;
+}
+
+.para-18-500 {
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 500;
+}
+
+
+/* -- */
+.chart-view .MuiChartsAxis-line {
+    stroke: #414545 !important;
+    shape-rendering: crispEdges;
+    stroke-width: 1;
+}
+
+.chart-view tspan {
+    font-size: 16px !important;
+}
+
+.chart-view p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.2px;
+    color: #AEAEAE;
+
+}
+
+.chart-view .MuiChartsAxis-tickLabel {
+    font-family: Satoshi-regular !important;
+    letter-spacing: 0.03333em;
+    fill: #AEAEAE !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+
+}
+
+@media only screen and (max-width: 600px) {
+    .xs-hidden {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    body {
+        background: #414545;
+    }
+
+    .sm-hidden {
+        display: none !important;
+    }
+
+    .sm-w-0 {
+        width: 0 !important;
+    }
+
+    .sm-w-full {
+        width: 100% !important;
+    }
+
+    .chart-view p {
+        font-size: 12px;
+
+    }
+}
+
+
+
+@media only screen and (min-width: 1536px) {
+    .logo {
+        max-width: 393px;
+        height: auto;
+    }
+
+    .chart-view tspan {
+        font-size: 10px !important;
+    }
+}
+
+/* ---- */

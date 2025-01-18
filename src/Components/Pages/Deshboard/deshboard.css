@@ -1,0 +1,149 @@
+.header-mob h5 {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 43.2px;
+    color: white;
+}
+
+.header-mob p {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16.2px;
+    padding-top: 8px;
+    color: #AEAEAE;
+}
+
+.desh-box h4 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 43.2px;
+    color: white;
+}
+
+
+
+.desh-box p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 32.4px;
+    color: #AEAEAE;
+}
+
+
+.text-18-sm {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32.4px;
+    color: white;
+}
+
+
+.detail-box h5 {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18.9px;
+    color: white;
+    margin-bottom: 4px;
+
+}
+
+.detail-box p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18.9px;
+    color: #AEAEAE;
+}
+
+.desktopTable th {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 24.3px;
+    color: white;
+
+}
+
+.desktopTable td {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24.3px;
+    color: #AEAEAE;
+}
+
+@media only screen and (max-width: 767px) {
+    .header-mob {
+        margin-bottom: 24px;
+    }
+
+    .header-mob h5 {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 22.95px;
+        text-align: center;
+    }
+
+
+
+    .desh-box p {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16.2px;
+    }
+
+    .desh-box h4 {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 27px;
+    }
+
+    .text-18-sm {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 24.3px;
+    }
+
+
+
+    .chart-view-content {
+        padding: 10px 0;
+    }
+
+    .chart-view-content>div {
+        width: auto !important;
+        margin: 0 auto;
+        height: auto !important;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .header-mob p {
+        font-size: 14px;
+    }
+
+    .desh-box h4 {
+        font-size: 22px;
+    }
+}
+
+@media only screen and (min-width: 1536px) {
+    .header-mob h5 {
+        font-size: 32px;
+    }
+
+    .desh-box h4 {
+        font-size: 32px;
+    }
+
+    .desh-box p {
+        font-size: 24px;
+    }
+
+    .text-18-sm {
+        line-height: 54.4px;
+    }
+
+    .chart-view-content>div {
+        width: 100%;
+        height: 450px;
+        margin: 0 auto;
+    }
+}

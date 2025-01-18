@@ -1,0 +1,175 @@
+.SplashScreenBG {
+    height: 100vh;
+    padding: 30px;
+    background: radial-gradient(50% 50% at 50% 50%,
+            rgba(65, 69, 69, 0.5) 0%,
+            rgba(0, 0, 0, 0.8) 100%);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    right: 0;
+    left: 0;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(1px);
+    overflow: hidden;
+}
+
+
+.splash-mid-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 830px;
+    text-align: center;
+    margin: 0 auto;
+    color: white
+}
+
+.splash-mid-content h1 {
+    font-family: 'Vendeur Rough Demo', sans-serif !important;
+    font-size: 60px;
+    font-weight: 400;
+    line-height: 74.2px;
+    width: 603px;
+    margin: 0 auto;
+    color: #FFFFFF;
+    text-shadow: 0px 0px 25px #FFFFFF;
+}
+
+
+.splash-mid-content p {
+
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 32.4px;
+    padding: 25px 0 50px;
+
+}
+
+.splash-mid-content button {
+    font-family: Satoshi-regular !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    line-height: 32.4px !important;
+    text-align: center;
+    border-radius: 45px !important;
+    width: 200px;
+    border: 2px solid white !important;
+    height: 65px;
+    transition: 0.2s ease;
+}
+
+.splash-mid-content button:hover {
+    background: rgba(128, 128, 128, 0.5);
+}
+/*  */
+/* splash.css */
+
+/* Keyframes for slide-in and slide-out */
+
+  
+/*  */
+@media only screen and (max-width: 767px) {
+
+    .SplashScreenBG {
+        padding: 30px;
+    }
+
+    .splash-mid-content {
+        width: 100%;
+        padding-bottom: 64px;
+    }
+
+
+    .splash-mid-content h1 {
+        font-size: 32px;
+        font-weight: 400;
+        line-height: 36.8px;
+        text-align: center;
+        width: 292px;
+
+    }
+
+    .splash-mid-content p {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 18.9px;
+        text-align: center;
+        padding: 32px 0 96px;
+
+    }
+
+    .sign-btn {
+        flex-direction: column;
+        gap: 16px !important;
+    }
+
+    .splash-mid-content button {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        line-height: 24.4px !important;
+        text-align: center;
+        border-radius: 8px !important;
+        width: 100%;
+        height: 56px;
+        transition: 0.2s ease;
+    }
+
+    .splash-mid-content .mob-btn {
+        background-color: #FFFFFF;
+        color: black;
+
+    }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 1023px) {
+    .splash-mid-content {
+        width: auto;
+    }
+}
+
+
+@media only screen and (min-width: 1536px) {
+    .SplashScreenBG {
+        padding: 40px;
+        height: 100%;
+    }
+
+    .splash-mid-content {
+        width: 1096px;
+
+
+    }
+
+    .splash-mid-content h1 {
+        font-size: 88px;
+        line-height: 101.2px;
+        width: 803px;
+
+    }
+
+    .splash-mid-content p {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32.4px;
+        padding: 40px 0 80px;
+
+    }
+
+    .splash-mid-content button {
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        line-height: 32.4px !important;
+        width: 256px;
+        height: 80px;
+    }
+
+    .element.style {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
