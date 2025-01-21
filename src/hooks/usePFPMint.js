@@ -22,6 +22,9 @@ const usePFPMint = () => {
         }
       );
 
+      console.log("📡 Response status:", response.status);
+      console.log("📡 Response headers:", Object.fromEntries(response.headers));
+
       if (!response.ok) {
         throw new Error(
           `Failed to generate images: ${response.status} ${response.statusText}`
@@ -29,11 +32,17 @@ const usePFPMint = () => {
       }
 
       const data = await response.json();
+      console.log("📦 Response data structure:", Object.keys(data));
       const imageArray =
         data.success?.map((base64) => `data:image/png;base64,${base64}`) || [];
       setGeneratedImages(imageArray);
     } catch (err) {
-      console.error("❌ Generation failed:", err.message);
+      console.error("❌ Detailed error info:", {
+        name: err.name,
+        message: err.message,
+        cause: err.cause,
+        stack: err.stack,
+      });
       setError(err.message);
     } finally {
       setIsLoading(false);

@@ -14,6 +14,9 @@ import shareImg from "../../../assets/images/dreamrunnerpfp/share.png";
 import flameVideo from "../../../assets/videos/flame.mp4";
 // import digVideo from "../../../assets/videos/dig.mp4";
 import usePFPMint from "../../../hooks/usePFPMint";
+import placeholder1 from "../../../assets/images/dreamrunnerpfp/placeholder1.png";
+import placeholder2 from "../../../assets/images/dreamrunnerpfp/placeholder2.png";
+import placeholder3 from "../../../assets/images/dreamrunnerpfp/placeholder3.png";
 
 // Enum for mint phases
 const MINT_PHASES = {
@@ -73,6 +76,19 @@ const PFPMint = () => {
     }
   }, [generatedImages]);
 
+  const buttonClasses =
+    "h-12 w-auto transition-all duration-300 hover:scale-105 hover:filter hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+
+  const gradientTextStyle = {
+    background:
+      "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    filter:
+      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+    textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+  };
+
   // Render current phase content
   const renderPhaseContent = () => {
     const images = Array.isArray(generatedImages) ? generatedImages : [];
@@ -85,39 +101,47 @@ const PFPMint = () => {
               {[0, 1, 2].map((id) => (
                 <div
                   key={id}
-                  className="relative w-[200px] md:w-[250px] h-auto"
+                  className="relative w-[200px] md:w-[250px] h-auto transition-all duration-300 hover:scale-105 hover:filter hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] cursor-pointer"
+                  onClick={() => {
+                    if (images[id]) {
+                      setSelectedRunner(id);
+                      setCurrentPhase(MINT_PHASES.CHOOSE_RUNNER);
+                    }
+                  }}
                 >
                   <div className="relative">
-                    {/* Loading box frame */}
                     <img
                       src={loadingImg}
                       alt="Loading Frame"
                       className="w-full h-full"
                     />
-                    {/* Generated image or flame */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       {images[id] ? (
                         <img
                           src={images[id]}
                           alt={`Generated ${id + 1}`}
-                          className="w-[85%] h-[85%] object-contain cursor-pointer"
-                          onClick={() => {
-                            setSelectedRunner(id);
-                            setCurrentPhase(MINT_PHASES.CHOOSE_RUNNER);
-                          }}
+                          className="w-full h-full object-contain"
                         />
                       ) : (
-                        isLoading && (
-                          <video
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-[85%] h-[85%] object-cover"
-                          >
-                            <source src={flameVideo} type="video/mp4" />
-                          </video>
-                        )
+                        <>
+                          <img
+                            src={[placeholder1, placeholder2, placeholder3][id]}
+                            alt={`Placeholder ${id + 1}`}
+                            className="w-[90%] h-[90%] object-contain opacity-50"
+                            style={{ display: isLoading ? "none" : "block" }}
+                          />
+                          {isLoading && (
+                            <video
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-[85%] h-[85%] object-cover"
+                            >
+                              <source src={flameVideo} type="video/mp4" />
+                            </video>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -157,7 +181,9 @@ const PFPMint = () => {
                   <img
                     src={generateBtn}
                     alt="Generate"
-                    className={`h-12 w-auto ${isLoading ? "opacity-50" : ""}`}
+                    className={`${buttonClasses} ${
+                      isLoading ? "opacity-50" : ""
+                    }`}
                   />
                 </button>
               </div>
@@ -171,7 +197,13 @@ const PFPMint = () => {
               {[0, 1, 2].map((id) => (
                 <div
                   key={id}
-                  className="relative w-[200px] md:w-[250px] h-auto"
+                  className="relative w-[200px] md:w-[250px] h-auto transition-all duration-300 hover:scale-105 hover:filter hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] cursor-pointer"
+                  onClick={() => {
+                    if (images[id]) {
+                      setSelectedRunner(id);
+                      setCurrentPhase(MINT_PHASES.CHOOSE_RUNNER);
+                    }
+                  }}
                 >
                   {selectedRunner === id && (
                     <div
@@ -198,13 +230,12 @@ const PFPMint = () => {
                       <img
                         src={images[id]}
                         alt={`Dreamrunner ${id + 1}`}
-                        className={`w-[85%] h-[85%] object-contain cursor-pointer
+                        className={`w-[93%] h-[93%] object-contain cursor-pointer mb-[5px]
                           ${
                             selectedRunner !== null && selectedRunner !== id
                               ? "opacity-30"
                               : "opacity-100"
                           }`}
-                        onClick={() => setSelectedRunner(id)}
                       />
                     </div>
                   </div>
@@ -233,7 +264,7 @@ const PFPMint = () => {
                 alt="Prompt"
                 className="w-[400px] md:w-[500px] h-auto"
               />
-              <div className="absolute inset-0 flex justify-center items-center gap-20">
+              <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
                 <button
                   onClick={() => {
                     setCurrentPhase(MINT_PHASES.LOADING);
@@ -246,7 +277,7 @@ const PFPMint = () => {
                   <img
                     src={generateBtn}
                     alt="Generate"
-                    className="h-12 w-auto"
+                    className={buttonClasses}
                   />
                 </button>
                 {selectedRunner !== null && (
@@ -254,7 +285,7 @@ const PFPMint = () => {
                     <img
                       src={confirmBtn}
                       alt="Confirm"
-                      className="h-12 w-auto"
+                      className={buttonClasses}
                     />
                   </button>
                 )}
@@ -279,7 +310,7 @@ const PFPMint = () => {
                       <img
                         src={confirmedImage}
                         alt="Selected Dreamrunner"
-                        className="w-[85%] h-[85%] object-contain"
+                        className="w-[93%] h-[93%] object-contain"
                       />
                     )}
                   </div>
@@ -318,9 +349,9 @@ const PFPMint = () => {
               />
               <button
                 onClick={nextPhase}
-                className="absolute right-[3%] top-1/2 -translate-y-1/2"
+                className="absolute right-[3%] top-1/2 -translate-y-[55%]"
               >
-                <img src={confirmBtn} alt="Confirm" className="h-12 w-auto" />
+                <img src={confirmBtn} alt="Confirm" className={buttonClasses} />
               </button>
             </div>
           </div>
@@ -341,7 +372,7 @@ const PFPMint = () => {
                       <img
                         src={confirmedImage}
                         alt="Selected Dreamrunner"
-                        className="w-[85%] h-[85%] object-contain"
+                        className="w-[93%] h-[93%] object-contain"
                       />
                     )}
                   </div>
@@ -369,21 +400,70 @@ const PFPMint = () => {
                     key={id}
                     className="relative w-[400px] md:w-[500px] h-[60px]"
                   >
-                    <img
-                      src={id === 2 ? nameTextbox : shareImg}
-                      alt="Share Input"
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      onClick={nextPhase}
-                      className="absolute right-[3%] top-1/2 -translate-y-1/2"
-                    >
-                      <img
-                        src={shareButton}
-                        alt="Share"
-                        className="h-12 w-auto"
-                      />
-                    </button>
+                    {id === 1 && (
+                      <>
+                        <img
+                          src={shareImg}
+                          alt="Share Input"
+                          className="w-full h-full object-cover"
+                        />
+                        <div
+                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
+                          style={gradientTextStyle}
+                        >
+                          SHARE YOUR CREATION ON X
+                        </div>
+                        <button
+                          onClick={nextPhase}
+                          className="absolute right-[3%] top-1/2 -translate-y-[55%]"
+                        >
+                          <img
+                            src={shareButton}
+                            alt="Share"
+                            className={buttonClasses}
+                          />
+                        </button>
+                      </>
+                    )}
+                    {id === 2 && (
+                      <>
+                        <img
+                          src={nameTextbox}
+                          alt="Wallet Input"
+                          className="w-full h-full object-cover"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Enter wallet address"
+                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] placeholder-[#858585] !font-[AveriaSerifLibre] bg-transparent border-none outline-none"
+                        />
+                      </>
+                    )}
+                    {id === 3 && (
+                      <>
+                        <img
+                          src={shareImg}
+                          alt="Confirm Input"
+                          className="w-full h-full object-cover"
+                        />
+                        <div
+                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
+                          style={gradientTextStyle}
+                        >
+                          CONFIRM YOUR WHITELIST
+                        </div>
+                        <button
+                          onClick={nextPhase}
+                          className="absolute right-[3%] top-1/2 -translate-y-[55%]"
+                        >
+                          <img
+                            src={confirmBtn}
+                            alt="Confirm"
+                            className={buttonClasses}
+                          />
+                        </button>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
