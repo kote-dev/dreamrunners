@@ -12,31 +12,54 @@ import nameTextbox from "../../../assets/images/dreamrunnerpfp/nametextbox.png";
 import shareButton from "../../../assets/images/dreamrunnerpfp/sharebutton.png";
 import shareImg from "../../../assets/images/dreamrunnerpfp/share.png";
 import flameVideo from "../../../assets/videos/flame.mp4";
+import digitalVideo from "../../../assets/videos/digital.webm";
 // import digVideo from "../../../assets/videos/dig.mp4";
 import usePFPMint from "../../../hooks/usePFPMint";
 import placeholder1 from "../../../assets/images/dreamrunnerpfp/placeholder1.png";
 import placeholder2 from "../../../assets/images/dreamrunnerpfp/placeholder2.png";
 import placeholder3 from "../../../assets/images/dreamrunnerpfp/placeholder3.png";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAccount, useConnect } from "wagmi";
+import connectDream from "../../../assets/images/buttons/connectwallet.png";
+import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit";
+import { toast } from "react-hot-toast";
 
 // Enum for mint phases
 const MINT_PHASES = {
   LOADING: 0,
   LOADING_WITH_FLAMES: 1,
   CHOOSE_RUNNER: 2,
-  NAME_RUNNER: 3,
+  PAYMENT: 3,
   SHARE_RUNNER: 4,
   WHITELIST_SECURED: 5,
 };
 
+// Log both paths to compare
+console.log("Flame video path:", flameVideo);
+console.log("Digital video path:", digitalVideo);
+
 const PFPMint = () => {
   const navigate = useNavigate();
-  const { isLoading, error, generatedImages, generateImages, clearImages } =
-    usePFPMint();
+  const {
+    isLoading,
+    isMinting,
+    isConfirmed,
+    error,
+    generatedImages,
+    generateImages,
+    clearImages,
+    mintDreamrunner,
+    txHash,
+  } = usePFPMint();
   const [currentPhase, setCurrentPhase] = useState(MINT_PHASES.LOADING);
   const [promptText, setPromptText] = useState("");
   const [selectedRunner, setSelectedRunner] = useState(null);
   const [confirmedImage, setConfirmedImage] = useState(null);
   const [runnerName, setRunnerName] = useState("");
+  const { isConnected, address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { openConnectModal } = useConnectModal();
+  const { openAccountModal } = useAccountModal();
 
   const nextPhase = () => {
     setCurrentPhase((prev) => {
@@ -55,6 +78,10 @@ const PFPMint = () => {
   };
 
   const handleGenerate = async () => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
     if (!promptText.trim()) return;
     console.log("🎨 Starting generation with prompt:", promptText);
     setCurrentPhase(MINT_PHASES.LOADING_WITH_FLAMES);
@@ -68,6 +95,41 @@ const PFPMint = () => {
       setConfirmedImage(generatedImages[selectedRunner]);
       nextPhase();
     }
+  };
+
+  const handleMint = async (imageData) => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
+    try {
+      toast.loading("Please confirm the transaction in your wallet...", {
+        id: "mint",
+      });
+      await mintDreamrunner(imageData);
+      toast.success("Successfully minted your Dreamrunner!", { id: "mint" });
+      nextPhase();
+    } catch (err) {
+      console.error("Mint error:", err);
+      toast.error("Failed to mint. Please try again.", { id: "mint" });
+    }
+  };
+
+  const handleShare = () => {
+    const shareText = "I just minted my Dreamrunner! 🎮✨";
+    const shareUrl = "https://www.dreampad.ai";
+    const hashtags = "Dreamrunner,NFT,Web3";
+
+    // Construct Twitter share URL
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText
+    )}&url=${encodeURIComponent(shareUrl)}&hashtags=${encodeURIComponent(
+      hashtags
+    )}`;
+
+    // Open in new window
+    window.open(twitterUrl, "_blank");
   };
 
   useEffect(() => {
@@ -89,6 +151,19 @@ const PFPMint = () => {
     textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
   };
 
+  const handleConnect = () => {
+    console.log("🔌 Connect wallet clicked");
+    console.log("📱 Current connection status:", isConnected);
+    console.log("🏠 Connected address:", address);
+    console.log("🔗 Available connectors:", connectors);
+
+    if (isConnected) {
+      openAccountModal?.();
+    } else {
+      openConnectModal?.();
+    }
+  };
+
   // Render current phase content
   const renderPhaseContent = () => {
     const images = Array.isArray(generatedImages) ? generatedImages : [];
@@ -101,7 +176,11 @@ const PFPMint = () => {
               {[0, 1, 2].map((id) => (
                 <div
                   key={id}
-                  className="relative w-[200px] md:w-[250px] h-auto transition-all duration-300 hover:scale-105 hover:filter hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] cursor-pointer"
+                  className="relative w-[200px] md:w-[250px] h-auto"
+                  style={{
+                    filter:
+                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                  }}
                   onClick={() => {
                     if (images[id]) {
                       setSelectedRunner(id);
@@ -118,7 +197,7 @@ const PFPMint = () => {
                     <div className="absolute inset-0 flex items-center justify-center">
                       {images[id] ? (
                         <img
-                          src={images[id]}
+                          src={images[id].image}
                           alt={`Generated ${id + 1}`}
                           className="w-full h-full object-contain"
                         />
@@ -197,7 +276,11 @@ const PFPMint = () => {
               {[0, 1, 2].map((id) => (
                 <div
                   key={id}
-                  className="relative w-[200px] md:w-[250px] h-auto transition-all duration-300 hover:scale-105 hover:filter hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] cursor-pointer"
+                  className="relative w-[200px] md:w-[250px] h-auto"
+                  style={{
+                    filter:
+                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                  }}
                   onClick={() => {
                     if (images[id]) {
                       setSelectedRunner(id);
@@ -228,7 +311,7 @@ const PFPMint = () => {
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
                       <img
-                        src={images[id]}
+                        src={images[id] ? images[id].image : null}
                         alt={`Dreamrunner ${id + 1}`}
                         className={`w-[93%] h-[93%] object-contain cursor-pointer mb-[5px]
                           ${
@@ -293,12 +376,17 @@ const PFPMint = () => {
             </div>
           </div>
         );
-      case MINT_PHASES.NAME_RUNNER:
-        console.log("🖼️ Confirmed image in next phase:", confirmedImage);
+      case MINT_PHASES.PAYMENT:
         return (
           <div className="flex flex-col items-center gap-8">
-            <div className="flex justify-center items-center mt-[250px]">
-              <div className="relative w-[200px] md:w-[250px] h-auto">
+            <div className="flex justify-center items-center mt-[250px] relative z-[2]">
+              <div
+                className="relative w-[200px] md:w-[250px] h-auto"
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                }}
+              >
                 <div className="relative">
                   <img
                     src={loadingImg}
@@ -308,7 +396,7 @@ const PFPMint = () => {
                   <div className="absolute inset-0 flex items-center justify-center">
                     {confirmedImage && (
                       <img
-                        src={confirmedImage}
+                        src={confirmedImage.image}
                         alt="Selected Dreamrunner"
                         className="w-[93%] h-[93%] object-contain"
                       />
@@ -320,39 +408,32 @@ const PFPMint = () => {
 
             <h2
               className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
-              style={{
-                background:
-                  "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter:
-                  "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
-                textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-              }}
+              style={gradientTextStyle}
             >
-              KEEP IT CLEAN - INAPPROPRIATE NAMES WILL RESULT IN LOSING
-              WHITELIST
+              MINT YOUR DREAMRUNNER
             </h2>
 
             <div className="relative">
               <img
-                src={nameTextbox}
-                alt="Name Input"
+                src={shareImg}
+                alt="Confirm"
                 className="w-[400px] md:w-[500px] h-auto"
               />
-              <input
-                type="text"
-                value={runnerName}
-                onChange={(e) => setRunnerName(e.target.value)}
-                placeholder="Enter name..."
-                className="absolute top-[20%] left-[3%] w-[67%] px-4 text-[#fcdfc5] placeholder-[#858585] !font-[AveriaSerifLibre] bg-transparent border-none outline-none"
-              />
-              <button
-                onClick={nextPhase}
-                className="absolute right-[3%] top-1/2 -translate-y-[55%]"
-              >
-                <img src={confirmBtn} alt="Confirm" className={buttonClasses} />
-              </button>
+              <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
+                <button
+                  onClick={() => handleMint(confirmedImage)}
+                  disabled={isMinting}
+                >
+                  <img
+                    src={confirmBtn}
+                    alt="Confirm"
+                    className={`${buttonClasses} ${
+                      isMinting ? "opacity-50" : ""
+                    }`}
+                  />
+                </button>
+                {error && <div className="text-red-500">{error}</div>}
+              </div>
             </div>
           </div>
         );
@@ -360,7 +441,13 @@ const PFPMint = () => {
         return (
           <div className="flex flex-col items-center gap-8">
             <div className="flex justify-center items-center gap-8 mt-[250px]">
-              <div className="relative w-[200px] md:w-[250px] h-auto">
+              <div
+                className="relative w-[200px] md:w-[250px] h-auto"
+                style={{
+                  filter:
+                    "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                }}
+              >
                 <div className="relative">
                   <img
                     src={loadingImg}
@@ -370,7 +457,7 @@ const PFPMint = () => {
                   <div className="absolute inset-0 flex items-center justify-center">
                     {confirmedImage && (
                       <img
-                        src={confirmedImage}
+                        src={confirmedImage.image}
                         alt="Selected Dreamrunner"
                         className="w-[93%] h-[93%] object-contain"
                       />
@@ -382,20 +469,12 @@ const PFPMint = () => {
               <div className="flex flex-col gap-4">
                 <h2
                   className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    filter:
-                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
-                    textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                  }}
+                  style={gradientTextStyle}
                 >
                   UNLOCK YOUR WL
                 </h2>
 
-                {[1, 2, 3].map((id) => (
+                {[1, 3].map((id) => (
                   <div
                     key={id}
                     className="relative w-[400px] md:w-[500px] h-[60px]"
@@ -414,7 +493,7 @@ const PFPMint = () => {
                           SHARE YOUR CREATION ON X
                         </div>
                         <button
-                          onClick={nextPhase}
+                          onClick={handleShare}
                           className="absolute right-[3%] top-1/2 -translate-y-[55%]"
                         >
                           <img
@@ -423,20 +502,6 @@ const PFPMint = () => {
                             className={buttonClasses}
                           />
                         </button>
-                      </>
-                    )}
-                    {id === 2 && (
-                      <>
-                        <img
-                          src={nameTextbox}
-                          alt="Wallet Input"
-                          className="w-full h-full object-cover"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Enter wallet address"
-                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] placeholder-[#858585] !font-[AveriaSerifLibre] bg-transparent border-none outline-none"
-                        />
                       </>
                     )}
                     {id === 3 && (
@@ -482,6 +547,10 @@ const PFPMint = () => {
                 <div
                   key={id}
                   className="relative w-[200px] md:w-[250px] h-auto"
+                  style={{
+                    filter:
+                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                  }}
                 >
                   <div className="relative">
                     <img
@@ -528,6 +597,34 @@ const PFPMint = () => {
 
   return (
     <div className="h-screen flex flex-col p-4 min-w-[500px] overflow-visible relative bg-[#3B3F3F]">
+      {/* Digital video overlay - now global */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          style={{
+            background: "transparent",
+            mixBlendMode: "screen",
+            filter: "brightness(1.5) contrast(1.2)",
+            opacity: "0.3", // Reduced opacity
+          }}
+        >
+          <source src={digitalVideo} type="video/webm" />
+        </video>
+      </div>
+
+      <div className="absolute top-4 right-4 z-50">
+        <div className="relative cursor-pointer" onClick={handleConnect}>
+          <img src={connectDream} alt="Connect Wallet" className="h-8 w-auto" />
+          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia text-xs w-full text-center">
+            {isConnected ? "Connected" : "Connect Wallet"}
+          </span>
+        </div>
+      </div>
+
       {/* Background texture */}
       <div className="absolute inset-0 z-0">
         <div
@@ -542,7 +639,7 @@ const PFPMint = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-[1]">
+      <div className="relative z-[2]">
         {/* Background elements */}
         <div className="absolute left-1/2 top-[5%] -translate-x-1/2 z-10 flex flex-col items-center min-w-[500px]">
           <img
