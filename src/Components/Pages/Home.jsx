@@ -62,7 +62,7 @@ const Home = () => {
           className="group cursor-pointer flex flex-col items-center"
         >
           <h1 className="text-[#858585] mb-2 font-averia italic !font-[AveriaSerifLibre] text-lg md:text-xl text-center hover:text-[#a0a0a0] transition-all duration-200 group-hover:scale-105 group-hover:text-[#a0a0a0]">
-            Mint Your Dream Lair
+            Mint Your Dreamrunner
           </h1>
           <img
             src={titleDecor}
