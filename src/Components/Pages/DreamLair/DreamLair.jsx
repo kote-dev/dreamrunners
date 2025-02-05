@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect, useSignMessage } from "wagmi";
-import connectDream from "../../../assets/images/buttons/connectDream.png";
-import connectDreamActive from "../../../assets/images/buttons/connectDreamACTIVE.png";
 import { useDiscordAuth } from "../../../context/DiscordAuthContext";
 import ReactGA from "react-ga4";
 import QubeService from "../../../services/QubeService";
-import texture from "../../../assets/images/textures/Texture.png";
 import { useNavigate } from "react-router-dom";
+import { IMAGES } from "../../../config/assetUrls";
 
-console.log("Imported texture:", texture);
+console.log("Imported texture:", IMAGES.textures.main);
 
 const DreamLair = () => {
   const { address, isConnected } = useAccount();
@@ -147,7 +145,7 @@ const DreamLair = () => {
     <div
       className="min-h-screen flex flex-col items-center justify-center p-4"
       style={{
-        backgroundImage: `url(${texture})`,
+        backgroundImage: `url(${IMAGES.textures.main})`,
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundColor: "#3B3F3F",
@@ -162,7 +160,11 @@ const DreamLair = () => {
             <div className="flex flex-col items-center gap-2">
               <button onClick={account ? openAccountModal : openConnectModal}>
                 <img
-                  src={account ? connectDreamActive : connectDream}
+                  src={
+                    account
+                      ? IMAGES.buttons.connectWalletActive
+                      : IMAGES.buttons.connectWallet
+                  }
                   alt="Connect Wallet"
                 />
               </button>

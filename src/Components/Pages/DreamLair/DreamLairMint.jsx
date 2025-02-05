@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import texture from "../../../assets/images/textures/Texture.png";
-import connectDream from "../../../assets/images/buttons/connectwallet.png";
-import connectDreamActive from "../../../assets/images/buttons/connectwallet.png";
+import { IMAGES } from "../../../config/assetUrls";
 import twitterButton from "../../../assets/images/buttons/twitterbutton.png";
 import whitepaperButton from "../../../assets/images/buttons/whitepaperbutton.png";
 import discordButton from "../../../assets/images/buttons/discordbutton.png";
@@ -189,7 +187,7 @@ const DreamLairMint = () => {
       style={{
         backgroundImage:
           selectedMintType || showPFPMint
-            ? `url(${texture})`
+            ? `url(${IMAGES.textures.main})`
             : `url(${mintChoiceBG})`,
         backgroundBlendMode: "multiply",
         backgroundSize: "cover",
@@ -203,7 +201,11 @@ const DreamLairMint = () => {
             onClick={() => navigate("/mint/dreamrunner")}
             className="relative"
           >
-            <img src={connectDream} alt="PFP Mint" className="h-8 w-auto" />
+            <img
+              src={IMAGES.buttons.connectWallet}
+              alt="PFP Mint"
+              className="h-8 w-auto"
+            />
             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia text-xs w-full text-center">
               Dreamrunner Mint
             </span>

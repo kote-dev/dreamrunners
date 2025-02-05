@@ -1,5 +1,5 @@
 .SignIn {
-    background-image: url(../../../Assets/Images/BackgroundImages/group112-66350abf77a95.webp);
+    background-image: url(${IMAGES.bg.signIn});
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;
@@ -8,7 +8,7 @@
 }
 
 .SignUp {
-    background-image: url(../../../Assets/Images/BackgroundImages/group113-66350abe7474a.webp);
+    background-image: url(${IMAGES.bg.signUp});
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;

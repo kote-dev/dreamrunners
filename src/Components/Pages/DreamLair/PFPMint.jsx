@@ -1,26 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import texture from "../../../assets/images/textures/Texture.png";
-import dreamrunnerimg from "../../../assets/images/bg/dreamrunnerbg.png";
-import dreamrunnerlogo from "../../../assets/images/bg/dreamrunnerlogo.png";
-import loadingImg from "../../../assets/images/dreamrunnerpfp/loading.png";
-import promptImg from "../../../assets/images/dreamrunnerpfp/promptnobutton.png";
-import createFlairImg from "../../../assets/images/dreamrunnerpfp/createflair.png";
-import generateBtn from "../../../assets/images/dreamrunnerpfp/generate.png";
-import confirmBtn from "../../../assets/images/dreamrunnerpfp/confirm.png";
-import nameTextbox from "../../../assets/images/dreamrunnerpfp/nametextbox.png";
-import shareButton from "../../../assets/images/dreamrunnerpfp/sharebutton.png";
-import shareImg from "../../../assets/images/dreamrunnerpfp/share.png";
-import flameVideo from "../../../assets/videos/flame.mp4";
-import digitalVideo from "../../../assets/videos/digital.webm";
-// import digVideo from "../../../assets/videos/dig.mp4";
+import { IMAGES, VIDEOS } from "../../../config/assetUrls";
 import usePFPMint from "../../../hooks/usePFPMint";
-import placeholder1 from "../../../assets/images/dreamrunnerpfp/placeholder1.png";
-import placeholder2 from "../../../assets/images/dreamrunnerpfp/placeholder2.png";
-import placeholder3 from "../../../assets/images/dreamrunnerpfp/placeholder3.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useConnect } from "wagmi";
-import connectDream from "../../../assets/images/buttons/connectwallet.png";
 import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-hot-toast";
 
@@ -35,8 +18,8 @@ const MINT_PHASES = {
 };
 
 // Log both paths to compare
-console.log("Flame video path:", flameVideo);
-console.log("Digital video path:", digitalVideo);
+console.log("Flame video path:", VIDEOS.flame);
+console.log("Digital video path:", VIDEOS.digital);
 
 const PFPMint = () => {
   const navigate = useNavigate();
@@ -190,7 +173,7 @@ const PFPMint = () => {
                 >
                   <div className="relative">
                     <img
-                      src={loadingImg}
+                      src={IMAGES.dreamrunnerpfp.loading}
                       alt="Loading Frame"
                       className="w-full h-full"
                     />
@@ -204,7 +187,13 @@ const PFPMint = () => {
                       ) : (
                         <>
                           <img
-                            src={[placeholder1, placeholder2, placeholder3][id]}
+                            src={
+                              [
+                                IMAGES.dreamrunnerpfp.placeholder1,
+                                IMAGES.dreamrunnerpfp.placeholder2,
+                                IMAGES.dreamrunnerpfp.placeholder3,
+                              ][id]
+                            }
                             alt={`Placeholder ${id + 1}`}
                             className="w-[90%] h-[90%] object-contain opacity-50"
                             style={{ display: isLoading ? "none" : "block" }}
@@ -215,9 +204,9 @@ const PFPMint = () => {
                               loop
                               muted
                               playsInline
-                              className="w-[85%] h-[85%] object-cover"
+                              className="w-[90%] h-[90%] object-cover"
                             >
-                              <source src={flameVideo} type="video/mp4" />
+                              <source src={VIDEOS.flame} type="video/mp4" />
                             </video>
                           )}
                         </>
@@ -245,7 +234,7 @@ const PFPMint = () => {
 
             <div className="relative">
               <img
-                src={promptImg}
+                src={IMAGES.dreamrunnerpfp.prompt}
                 alt="Prompt"
                 className="w-[400px] md:w-[500px] h-auto"
               />
@@ -258,7 +247,7 @@ const PFPMint = () => {
               <div className="absolute right-[3%] top-1/2 -translate-y-1/2">
                 <button onClick={handleGenerate} disabled={isLoading}>
                   <img
-                    src={generateBtn}
+                    src={IMAGES.dreamrunnerpfp.generate}
                     alt="Generate"
                     className={`${buttonClasses} ${
                       isLoading ? "opacity-50" : ""
@@ -305,7 +294,7 @@ const PFPMint = () => {
                   )}
                   <div className="relative">
                     <img
-                      src={loadingImg}
+                      src={IMAGES.dreamrunnerpfp.loading}
                       alt="Loading Frame"
                       className="w-full h-full"
                     />
@@ -343,7 +332,7 @@ const PFPMint = () => {
 
             <div className="relative">
               <img
-                src={shareImg}
+                src={IMAGES.dreamrunnerpfp.share}
                 alt="Prompt"
                 className="w-[400px] md:w-[500px] h-auto"
               />
@@ -358,7 +347,7 @@ const PFPMint = () => {
                   }}
                 >
                   <img
-                    src={generateBtn}
+                    src={IMAGES.dreamrunnerpfp.generate}
                     alt="Generate"
                     className={buttonClasses}
                   />
@@ -366,7 +355,7 @@ const PFPMint = () => {
                 {selectedRunner !== null && (
                   <button onClick={handleConfirm}>
                     <img
-                      src={confirmBtn}
+                      src={IMAGES.dreamrunnerpfp.confirm}
                       alt="Confirm"
                       className={buttonClasses}
                     />
@@ -389,7 +378,7 @@ const PFPMint = () => {
               >
                 <div className="relative">
                   <img
-                    src={loadingImg}
+                    src={IMAGES.dreamrunnerpfp.loading}
                     alt="Loading Frame"
                     className="w-full h-full"
                   />
@@ -415,7 +404,7 @@ const PFPMint = () => {
 
             <div className="relative">
               <img
-                src={shareImg}
+                src={IMAGES.dreamrunnerpfp.share}
                 alt="Confirm"
                 className="w-[400px] md:w-[500px] h-auto"
               />
@@ -425,7 +414,7 @@ const PFPMint = () => {
                   disabled={isMinting}
                 >
                   <img
-                    src={confirmBtn}
+                    src={IMAGES.dreamrunnerpfp.confirm}
                     alt="Confirm"
                     className={`${buttonClasses} ${
                       isMinting ? "opacity-50" : ""
@@ -450,7 +439,7 @@ const PFPMint = () => {
               >
                 <div className="relative">
                   <img
-                    src={loadingImg}
+                    src={IMAGES.dreamrunnerpfp.loading}
                     alt="Loading Frame"
                     className="w-full h-full"
                   />
@@ -482,7 +471,7 @@ const PFPMint = () => {
                     {id === 1 && (
                       <>
                         <img
-                          src={shareImg}
+                          src={IMAGES.dreamrunnerpfp.share}
                           alt="Share Input"
                           className="w-full h-full object-cover"
                         />
@@ -497,7 +486,7 @@ const PFPMint = () => {
                           className="absolute right-[3%] top-1/2 -translate-y-[55%]"
                         >
                           <img
-                            src={shareButton}
+                            src={IMAGES.dreamrunnerpfp.sharebutton}
                             alt="Share"
                             className={buttonClasses}
                           />
@@ -507,7 +496,7 @@ const PFPMint = () => {
                     {id === 3 && (
                       <>
                         <img
-                          src={shareImg}
+                          src={IMAGES.dreamrunnerpfp.share}
                           alt="Confirm Input"
                           className="w-full h-full object-cover"
                         />
@@ -522,7 +511,7 @@ const PFPMint = () => {
                           className="absolute right-[3%] top-1/2 -translate-y-[55%]"
                         >
                           <img
-                            src={confirmBtn}
+                            src={IMAGES.dreamrunnerpfp.confirm}
                             alt="Confirm"
                             className={buttonClasses}
                           />
@@ -554,7 +543,7 @@ const PFPMint = () => {
                 >
                   <div className="relative">
                     <img
-                      src={loadingImg}
+                      src={IMAGES.dreamrunnerpfp.loading}
                       alt="Loading Frame"
                       className="w-full h-full"
                     />
@@ -566,7 +555,7 @@ const PFPMint = () => {
                         playsInline
                         className="w-[85%] h-[85%] object-cover"
                       >
-                        <source src={flameVideo} type="video/mp4" />
+                        <source src={VIDEOS.flame} type="video/mp4" />
                       </video>
                     </div>
                   </div>
@@ -612,13 +601,17 @@ const PFPMint = () => {
             opacity: "0.3", // Reduced opacity
           }}
         >
-          <source src={digitalVideo} type="video/webm" />
+          <source src={VIDEOS.digital} type="video/webm" />
         </video>
       </div>
 
       <div className="absolute top-4 right-4 z-50">
         <div className="relative cursor-pointer" onClick={handleConnect}>
-          <img src={connectDream} alt="Connect Wallet" className="h-8 w-auto" />
+          <img
+            src={IMAGES.buttons.connectWallet}
+            alt="Connect Wallet"
+            className="h-8 w-auto"
+          />
           <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia text-xs w-full text-center">
             {isConnected ? "Connected" : "Connect Wallet"}
           </span>
@@ -630,7 +623,7 @@ const PFPMint = () => {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `url(${texture})`,
+            backgroundImage: `url(${IMAGES.textures.main})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -643,12 +636,12 @@ const PFPMint = () => {
         {/* Background elements */}
         <div className="absolute left-1/2 top-[5%] -translate-x-1/2 z-10 flex flex-col items-center min-w-[500px]">
           <img
-            src={createFlairImg}
+            src={IMAGES.dreamrunnerpfp.createFlair}
             alt="Create Flair"
             className="w-[500px] h-auto"
           />
           <img
-            src={dreamrunnerlogo}
+            src={IMAGES.bg.dreamrunnerLogo}
             alt="Dreamrunner Logo"
             className="w-[500px] h-auto"
           />
@@ -657,7 +650,7 @@ const PFPMint = () => {
         <div
           className="absolute inset-0 top-[0%] z-0 min-w-[500px] min-h-screen overflow-visible"
           style={{
-            backgroundImage: `url(${dreamrunnerimg})`,
+            backgroundImage: `url(${IMAGES.dreamrunnerbg})`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",
@@ -668,8 +661,8 @@ const PFPMint = () => {
           }}
         />
 
-        {/* Debug Navigation Arrows */}
-        <div className="fixed inset-y-0 left-4 flex items-center z-50">
+        {/* Debug Navigation Arrows - Commented out */}
+        {/* <div className="fixed inset-y-0 left-4 flex items-center z-50">
           <button
             onClick={prevPhase}
             className="text-white text-4xl opacity-50 hover:opacity-100"
@@ -684,7 +677,7 @@ const PFPMint = () => {
           >
             →
           </button>
-        </div>
+        </div> */}
 
         {/* Phase Content */}
         <div className="flex-1 flex items-center justify-center z-10">

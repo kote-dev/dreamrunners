@@ -1,12 +1,5 @@
 import React from "react";
-import { S3_BASE_URL } from "../../config/constants";
-
-const texture = `${S3_BASE_URL}/images/textures/Texture.png`;
-const twitterButton = `${S3_BASE_URL}/images/buttons/twitterbutton.png`;
-const whitepaperButton = `${S3_BASE_URL}/images/buttons/whitepaperbutton.png`;
-const discordButton = `${S3_BASE_URL}/images/buttons/discordbutton.png`;
-const titleDecor = `${S3_BASE_URL}/images/buttons/titledecor.png`;
-import videobox from "../../assets/images/bg/videobox.png";
+import { IMAGES } from "../../config/assetUrls";
 import { Link } from "react-router-dom";
 
 const Home = () => {
@@ -14,7 +7,7 @@ const Home = () => {
     <div
       className="min-h-screen flex flex-col p-4 min-w-[320px] max-w-[100vw] overflow-x-hidden"
       style={{
-        backgroundImage: `url(${texture})`,
+        backgroundImage: `url(${IMAGES.textures.main})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -27,7 +20,7 @@ const Home = () => {
           onClick={() => window.open("https://x.com/dreamrunnergg", "_blank")}
         >
           <img
-            src={twitterButton}
+            src={IMAGES.buttons.twitter}
             alt="Twitter"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -39,7 +32,7 @@ const Home = () => {
           }
         >
           <img
-            src={whitepaperButton}
+            src={IMAGES.buttons.whitepaper}
             alt="Whitepaper"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -49,7 +42,7 @@ const Home = () => {
           onClick={() => window.open("https://discord.gg/kote", "_blank")}
         >
           <img
-            src={discordButton}
+            src={IMAGES.buttons.discord}
             alt="Discord"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -65,7 +58,7 @@ const Home = () => {
             Mint Your Dreamrunner
           </h1>
           <img
-            src={titleDecor}
+            src={IMAGES.buttons.titleDecor}
             alt="Title Decoration"
             className="mb-8 w-32 group-hover:opacity-80 transition-all duration-200 group-hover:scale-105"
           />
@@ -74,7 +67,7 @@ const Home = () => {
         <div className="w-full mb-8 relative flex justify-center">
           <div className="relative w-full max-w-[800px]">
             <img
-              src={videobox}
+              src={IMAGES.bg.videobox}
               alt=""
               className="w-full h-auto object-contain"
             />
