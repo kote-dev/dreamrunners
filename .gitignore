@@ -30,3 +30,4 @@ dist-ssr
 # Assets folders
 src/assets/
 src/assets_optimized/
+src/assets_full

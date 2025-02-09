@@ -133,3 +133,18 @@ body {
 }
 
 /* ---- */
+
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+  width: 36px;  /* Increased width to fit all dots */
+  display: inline-block;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75%, 100% { content: '...'; }
+}

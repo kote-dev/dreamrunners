@@ -1,13 +1,13 @@
 import React from "react";
 import { IMAGES } from "../../config/assetUrls";
 import { Link } from "react-router-dom";
+import { Picture } from "../../components/Picture";
 
 const Home = () => {
   return (
     <div
       className="min-h-screen flex flex-col p-4 min-w-[320px] max-w-[100vw] overflow-x-hidden"
       style={{
-        backgroundImage: `url(${IMAGES.textures.main})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -19,8 +19,8 @@ const Home = () => {
           className="relative z-50 cursor-pointer"
           onClick={() => window.open("https://x.com/dreamrunnergg", "_blank")}
         >
-          <img
-            src={IMAGES.buttons.twitter}
+          <Picture
+            sources={IMAGES.buttons.twitter}
             alt="Twitter"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -31,8 +31,8 @@ const Home = () => {
             window.open("https://whitepaper.dreampro.ai", "_blank")
           }
         >
-          <img
-            src={IMAGES.buttons.whitepaper}
+          <Picture
+            sources={IMAGES.buttons.whitepaper}
             alt="Whitepaper"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -41,8 +41,8 @@ const Home = () => {
           className="relative z-50 cursor-pointer"
           onClick={() => window.open("https://discord.gg/kote", "_blank")}
         >
-          <img
-            src={IMAGES.buttons.discord}
+          <Picture
+            sources={IMAGES.buttons.discord}
             alt="Discord"
             className="h-8 w-auto drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
           />
@@ -57,8 +57,8 @@ const Home = () => {
           <h1 className="text-[#858585] mb-2 font-averia italic !font-[AveriaSerifLibre] text-lg md:text-xl text-center hover:text-[#a0a0a0] transition-all duration-200 group-hover:scale-105 group-hover:text-[#a0a0a0]">
             Mint Your Dreamrunner
           </h1>
-          <img
-            src={IMAGES.buttons.titleDecor}
+          <Picture
+            sources={IMAGES.buttons.titleDecor}
             alt="Title Decoration"
             className="mb-8 w-32 group-hover:opacity-80 transition-all duration-200 group-hover:scale-105"
           />
@@ -66,8 +66,8 @@ const Home = () => {
 
         <div className="w-full mb-8 relative flex justify-center">
           <div className="relative w-full max-w-[800px]">
-            <img
-              src={IMAGES.bg.videobox}
+            <Picture
+              sources={IMAGES.bg.videobox}
               alt=""
               className="w-full h-auto object-contain"
             />

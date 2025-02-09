@@ -45,7 +45,15 @@ const usePFPMint = () => {
 
   const generateImages = async (prompt) => {
     if (!address) {
-      toast.error("Please connect your wallet first");
+      toast.error("Please connect your wallet first", {
+        position: "top-center",
+        style: {
+          background: "#fff",
+          color: "#333",
+          padding: "16px",
+          borderRadius: "8px",
+        },
+      });
       return;
     }
 

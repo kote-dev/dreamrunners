@@ -33,13 +33,18 @@ def optimize_image(input_path, output_path, max_width=None):
             new_size = (int(img.width * ratio), int(img.height * ratio))
             img = img.resize(new_size, Image.Resampling.LANCZOS)
 
-        # Save with better quality
-        if input_path.lower().endswith('.png'):
-            # For PNG, use maximum quality
-            img.save(output_path, 'PNG', optimize=True)
+        # More aggressive optimization for large background images
+        if 'bg/' in input_path.lower():
+            if input_path.lower().endswith('.png'):
+                img.save(output_path, 'PNG', optimize=True, quality=85)
+            else:
+                img.save(output_path, 'JPEG', quality=75, optimize=True)  # Lower quality for bg
         else:
-            # For JPEG, use higher quality (85 instead of 60)
-            img.save(output_path, 'JPEG', quality=85, optimize=True)
+            # Keep existing high quality for UI elements
+            if input_path.lower().endswith('.png'):
+                img.save(output_path, 'PNG', optimize=True)
+            else:
+                img.save(output_path, 'JPEG', quality=85, optimize=True)
             
         new_size = get_file_size(output_path)
         reduction = ((original_size - new_size) / original_size) * 100
@@ -100,16 +105,28 @@ def optimize_video(input_path, output_path):
         print(f"Error processing {input_path}: {e}")
         return 0, 0
 
+def convert_to_webp(input_path, output_path, quality=85):
+    """Convert image to WebP format"""
+    try:
+        img = Image.open(input_path)
+        webp_path = output_path.rsplit('.', 1)[0] + '.webp'
+        img.save(webp_path, 'WEBP', quality=quality)
+        print(f"Created WebP: {webp_path}")
+        return True
+    except Exception as e:
+        print(f"Error converting to WebP: {e}")
+        return False
+
 def process_assets(input_dir, output_dir):
     """Process all assets in the input directory"""
     create_output_dirs(output_dir)
     
     # Define max widths for different image types (reduced sizes)
     size_configs = {
-        'bg': 1600,          # Reduced from 1920
-        'textures': 1024,    # Reduced from 2048
-        'buttons': 128,      # Reduced from 256
-        'dreamrunnerpfp': 400  # Reduced from 512
+        'bg': 1280,          # Even smaller for backgrounds
+        'textures': 1024,    # Keep this size for textures
+        'buttons': 128,      # Keep this for UI
+        'dreamrunnerpfp': 400  # Keep this for PFPs
     }
 
     total_original_size = 0
@@ -137,6 +154,11 @@ def process_assets(input_dir, output_dir):
             # Process based on file type
             if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                 orig, new = optimize_image(input_path, output_path, max_width)
+                # Also create WebP version
+                if 'bg/' in input_path.lower():
+                    convert_to_webp(input_path, output_path, quality=75)  # Lower quality for bg
+                else:
+                    convert_to_webp(input_path, output_path, quality=85)  # Higher for UI
             elif file.lower().endswith(('.mp4', '.webm')):
                 orig, new = optimize_video(input_path, output_path)
             else:
@@ -158,7 +180,7 @@ def process_assets(input_dir, output_dir):
     print(f"Processing time: {duration:.1f} seconds")
 
 if __name__ == "__main__":
-    input_dir = "src/assets"
+    input_dir = "src/assets_full"
     output_dir = "src/assets_optimized"
     
     process_assets(input_dir, output_dir)
