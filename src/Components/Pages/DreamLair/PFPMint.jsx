@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IMAGES, VIDEOS } from "../../../config/assetUrls";
 import usePFPMint from "../../../hooks/usePFPMint";
 import { toast } from "react-hot-toast";
-import { Picture } from "../../../components/Picture";
+import { Picture } from "../../../Components/Picture";
 import { useAccount } from "wagmi";
 import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit";
 
