@@ -1,8 +1,8 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Home from "./Pages/Home";
-import DreamLair from "./Pages/DreamLair/DreamLair";
-import PFPMint from "./Pages/DreamLair/PFPMint";
-import DiscordCallback from "./Pages/DreamLair/DiscordCallback";
+import Home from "../components/Pages/Home";
+import DreamLair from "../components/Pages/DreamLair/DreamLair";
+import PFPMint from "../components/Pages/DreamLair/PFPMint";
+import DiscordCallback from "../components/Pages/DreamLair/DiscordCallback";
 
 const PagesRoutes = () => {
   return (
