@@ -736,9 +736,9 @@ const PFPMint = () => {
           className="w-full h-full object-cover"
           style={{
             background: "transparent",
-            mixBlendMode: "screen",
-            filter: "brightness(1.5) contrast(1.2)",
-            opacity: "0.3", // Reduced opacity
+            mixBlendMode: "soft-light",
+            filter: "brightness(1.2) contrast(1.1)",
+            opacity: "0.15",
           }}
         >
           <source src={VIDEOS.digital} type="video/webm" />
