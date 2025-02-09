@@ -1,7 +1,7 @@
 import React from "react";
 import { IMAGES } from "../../config/assetUrls";
 import { Link } from "react-router-dom";
-import { Picture } from "../../components/Picture";
+import { Picture } from "../Picture";
 
 const Home = () => {
   return (
