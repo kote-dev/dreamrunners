@@ -1,5 +1,5 @@
 import "./App.css";
-import PagesRoutes from "@/components/PagesRoutes";
+import PagesRoutes from "@/Components/PagesRoutes";
 import { BrowserRouter as Router } from "react-router-dom";
 import { RainbowKitProvider, ConnectButton } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
