@@ -1,5 +1,74 @@
 import { S3_BASE_URL } from "./constants";
 
+// Preload function
+const preloadAssets = () => {
+  console.log("🚀 Starting asset preload...");
+  let loadedCount = 0;
+  let totalAssets = 0;
+
+  // Helper function to preload image
+  const preloadImage = (url) => {
+    totalAssets++;
+    const img = new Image();
+    img.onload = () => {
+      loadedCount++;
+      console.log(
+        `✅ Loaded image: ${url
+          .split("/")
+          .pop()} (${loadedCount}/${totalAssets})`
+      );
+    };
+    img.onerror = () => {
+      loadedCount++;
+      console.error(`❌ Failed to load image: ${url.split("/").pop()}`);
+    };
+    img.src = url;
+  };
+
+  // Helper function to preload video
+  const preloadVideo = (url) => {
+    totalAssets++;
+    const video = document.createElement("video");
+    video.preload = "auto";
+
+    video.onloadeddata = () => {
+      loadedCount++;
+      console.log(
+        `🎥 Loaded video: ${url
+          .split("/")
+          .pop()} (${loadedCount}/${totalAssets})`
+      );
+    };
+    video.onerror = () => {
+      loadedCount++;
+      console.error(`❌ Failed to load video: ${url.split("/").pop()}`);
+    };
+    video.src = url;
+  };
+
+  // Preload all images
+  Object.entries(IMAGES).forEach(([category, assets]) => {
+    console.log(`📁 Preloading ${category} assets...`);
+    if (typeof assets === "object") {
+      Object.entries(assets).forEach(([key, item]) => {
+        if (typeof item === "string") {
+          preloadImage(item);
+        } else if (typeof item === "object") {
+          Object.values(item).forEach((url) => preloadImage(url));
+        }
+      });
+    }
+  });
+
+  // Preload all videos
+  console.log("🎬 Preloading videos...");
+  Object.entries(VIDEOS).forEach(([key, url]) => {
+    preloadVideo(url);
+  });
+
+  console.log(`⏳ Queued ${totalAssets} assets for preloading`);
+};
+
 export const IMAGES = {
   textures: {
     main: {
@@ -68,3 +137,8 @@ export const VIDEOS = {
   digital: `${S3_BASE_URL}/videos/digital.webm`,
   withBg: `${S3_BASE_URL}/videos/WithBG.mp4`,
 };
+
+// Execute preload
+preloadAssets();
+
+export default { IMAGES, VIDEOS };

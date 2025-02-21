@@ -560,7 +560,6 @@ const PFPMint = () => {
                       }`}
                     />
                   </button>
-                  {error && <div className="text-red-500">{error}</div>}
                 </div>
               </div>
             </div>
@@ -782,17 +781,6 @@ const PFPMint = () => {
               LOADING
               <span className="loading-dots"></span>
             </h2>
-
-            {error && (
-              <div
-                className="text-red-500 text-center mt-4"
-                style={{
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                }}
-              >
-                {error}
-              </div>
-            )}
           </div>
         );
       default:
@@ -814,7 +802,7 @@ const PFPMint = () => {
             background: "transparent",
             mixBlendMode: "soft-light",
             filter: "brightness(1.2) contrast(1.1)",
-            opacity: "0.15",
+            opacity: "0.2",
           }}
         >
           <source src={VIDEOS.digital} type="video/webm" />

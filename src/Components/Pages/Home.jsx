@@ -30,7 +30,7 @@ const Home = () => {
             background: "transparent",
             mixBlendMode: "soft-light",
             filter: "brightness(1.2) contrast(1.1)",
-            opacity: "0.15",
+            opacity: "0.2",
           }}
         >
           <source src={VIDEOS.digital} type="video/webm" />
