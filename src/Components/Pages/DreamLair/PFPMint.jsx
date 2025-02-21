@@ -252,7 +252,7 @@ const PFPMint = () => {
       case MINT_PHASES.LOADING:
         return (
           <div className="flex flex-col items-center gap-8">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-[80px] md:mt-[120px] px-4">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-[80px] md:mt-[120px] h-[300px]">
               {/* Mobile Navigation */}
               {generatedImages && generatedImages.length > 0 && (
                 <div className="flex items-center justify-between w-full md:hidden px-4">
@@ -377,7 +377,7 @@ const PFPMint = () => {
       case MINT_PHASES.CHOOSE_RUNNER:
         return (
           <div className="flex flex-col items-center gap-8">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-[80px] md:mt-[120px] px-4">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 mt-[80px] md:mt-[120px] h-[300px]">
               {/* Mobile Navigation */}
               {generatedImages && generatedImages.length > 0 && (
                 <div className="flex items-center justify-between w-full md:hidden px-4">
@@ -503,11 +503,76 @@ const PFPMint = () => {
         );
       case MINT_PHASES.PAYMENT:
         return (
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 px-4 mt-[80px] md:mt-[120px]">
-            {/* Left side - Image */}
-            <div className="flex justify-center items-center relative z-[2]">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-[80px] md:mt-[120px]">
+              {/* Left side - Image */}
+              <div className="flex justify-center items-center relative z-[2]">
+                <div
+                  className="relative w-[300px] md:w-[250px] h-auto"
+                  style={{
+                    filter:
+                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                  }}
+                >
+                  <div className="relative">
+                    <Picture
+                      sources={IMAGES.dreamrunnerpfp.loading}
+                      alt="Loading Frame"
+                      className="w-full h-full"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {confirmedImage && (
+                        <img
+                          src={confirmedImage.image}
+                          alt="Selected Dreamrunner"
+                          className="w-[93%] h-[93%] object-contain"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right side - Text and Button */}
+              <div className="flex flex-col items-center gap-4">
+                <h2
+                  className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
+                  style={gradientTextStyle}
+                >
+                  MINT YOUR DREAMRUNNER
+                </h2>
+
+                <div className="relative">
+                  <img
+                    src={IMAGES.dreamrunnerpfp.share}
+                    alt="Confirm"
+                    className="w-[400px] md:w-[500px] h-auto"
+                  />
+                  <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
+                    <button
+                      onClick={() => handleMint(confirmedImage)}
+                      disabled={isMinting}
+                    >
+                      <img
+                        src={IMAGES.dreamrunnerpfp.confirm}
+                        alt="Confirm"
+                        className={`${buttonClasses} ${
+                          isMinting ? "opacity-50" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case MINT_PHASES.SHARE_RUNNER:
+        return (
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-[80px] md:mt-[120px]">
               <div
-                className="relative w-[300px] md:w-[250px] h-auto"
+                className="relative w-[200px] md:w-[250px] h-auto"
                 style={{
                   filter:
                     "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
@@ -530,134 +595,73 @@ const PFPMint = () => {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Right side - Text and Button */}
-            <div className="flex flex-col items-center gap-4">
-              <h2
-                className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
-                style={gradientTextStyle}
-              >
-                MINT YOUR DREAMRUNNER
-              </h2>
-
-              <div className="relative">
-                <img
-                  src={IMAGES.dreamrunnerpfp.share}
-                  alt="Confirm"
-                  className="w-[400px] md:w-[500px] h-auto"
-                />
-                <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
-                  <button
-                    onClick={() => handleMint(confirmedImage)}
-                    disabled={isMinting}
-                  >
-                    <img
-                      src={IMAGES.dreamrunnerpfp.confirm}
-                      alt="Confirm"
-                      className={`${buttonClasses} ${
-                        isMinting ? "opacity-50" : ""
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case MINT_PHASES.SHARE_RUNNER:
-        return (
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 px-4 mt-[80px] md:mt-[120px]">
-            <div
-              className="relative w-[200px] md:w-[250px] h-auto"
-              style={{
-                filter:
-                  "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
-              }}
-            >
-              <div className="relative">
-                <Picture
-                  sources={IMAGES.dreamrunnerpfp.loading}
-                  alt="Loading Frame"
-                  className="w-full h-full"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {confirmedImage && (
-                    <img
-                      src={confirmedImage.image}
-                      alt="Selected Dreamrunner"
-                      className="w-[93%] h-[93%] object-contain"
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <h2
-                className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
-                style={gradientTextStyle}
-              >
-                UNLOCK YOUR WL
-              </h2>
-
-              {[1, 3].map((id) => (
-                <div
-                  key={id}
-                  className="relative w-[400px] md:w-[500px] h-[60px]"
+              <div className="flex flex-col gap-4">
+                <h2
+                  className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
+                  style={gradientTextStyle}
                 >
-                  {id === 1 && (
-                    <>
-                      <img
-                        src={IMAGES.dreamrunnerpfp.share}
-                        alt="Share Input"
-                        className="w-full h-full object-cover"
-                      />
-                      <div
-                        className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
-                        style={gradientTextStyle}
-                      >
-                        SHARE YOUR CREATION ON X
-                      </div>
-                      <button
-                        onClick={handleShare}
-                        className="absolute right-[3%] top-1/2 -translate-y-[55%]"
-                      >
+                  UNLOCK YOUR WL
+                </h2>
+
+                {[1, 3].map((id) => (
+                  <div
+                    key={id}
+                    className="relative w-[400px] md:w-[500px] h-[60px]"
+                  >
+                    {id === 1 && (
+                      <>
                         <img
-                          src={IMAGES.dreamrunnerpfp.sharebutton}
-                          alt="Share"
-                          className={buttonClasses}
+                          src={IMAGES.dreamrunnerpfp.share}
+                          alt="Share Input"
+                          className="w-full h-full object-cover"
                         />
-                      </button>
-                    </>
-                  )}
-                  {id === 3 && (
-                    <>
-                      <img
-                        src={IMAGES.dreamrunnerpfp.share}
-                        alt="Confirm Input"
-                        className="w-full h-full object-cover"
-                      />
-                      <div
-                        className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
-                        style={gradientTextStyle}
-                      >
-                        CONFIRM YOUR WHITELIST
-                      </div>
-                      <button
-                        onClick={nextPhase}
-                        className="absolute right-[3%] top-1/2 -translate-y-[55%]"
-                      >
+                        <div
+                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
+                          style={gradientTextStyle}
+                        >
+                          SHARE YOUR CREATION ON X
+                        </div>
+                        <button
+                          onClick={handleShare}
+                          className="absolute right-[3%] top-1/2 -translate-y-[55%]"
+                        >
+                          <img
+                            src={IMAGES.dreamrunnerpfp.sharebutton}
+                            alt="Share"
+                            className={buttonClasses}
+                          />
+                        </button>
+                      </>
+                    )}
+                    {id === 3 && (
+                      <>
                         <img
-                          src={IMAGES.dreamrunnerpfp.confirm}
-                          alt="Confirm"
-                          className={buttonClasses}
+                          src={IMAGES.dreamrunnerpfp.share}
+                          alt="Confirm Input"
+                          className="w-full h-full object-cover"
                         />
-                      </button>
-                    </>
-                  )}
-                </div>
-              ))}
+                        <div
+                          className="absolute top-[28%] left-[3%] w-[67%] px-4 text-[#fcdfc5] !font-[AveriaSerifLibre]"
+                          style={gradientTextStyle}
+                        >
+                          CONFIRM YOUR WHITELIST
+                        </div>
+                        <button
+                          onClick={nextPhase}
+                          className="absolute right-[3%] top-1/2 -translate-y-[55%]"
+                        >
+                          <img
+                            src={IMAGES.dreamrunnerpfp.confirm}
+                            alt="Confirm"
+                            className={buttonClasses}
+                          />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
@@ -882,7 +886,9 @@ const PFPMint = () => {
             style={{
               transform:
                 currentPhase === MINT_PHASES.WHITELIST_SECURED
-                  ? "translateY(115px)"
+                  ? `translateY(${
+                      window.innerWidth < 768 ? "35px" : "115px"
+                    }) scale(${window.innerWidth < 768 ? "0.9" : "1"})`
                   : "none",
             }}
           />
@@ -895,7 +901,9 @@ const PFPMint = () => {
             style={{
               transform:
                 currentPhase === MINT_PHASES.WHITELIST_SECURED
-                  ? "translateY(115px)"
+                  ? `translateY(${
+                      window.innerWidth < 768 ? "35px" : "115px"
+                    }) scale(${window.innerWidth < 768 ? "0.9" : "1"})`
                   : "none",
             }}
             onLoad={() => setLogoLoaded(true)}
