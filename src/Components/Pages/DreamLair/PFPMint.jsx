@@ -879,6 +879,12 @@ const PFPMint = () => {
             className={`w-full h-auto px-4 transition-opacity duration-300 ${
               logoLoaded ? "opacity-0" : "opacity-100"
             }`}
+            style={{
+              transform:
+                currentPhase === MINT_PHASES.WHITELIST_SECURED
+                  ? "translateY(115px)"
+                  : "none",
+            }}
           />
           <img
             src={IMAGES.bg.dreamrunnerLogo.original}
@@ -889,7 +895,7 @@ const PFPMint = () => {
             style={{
               transform:
                 currentPhase === MINT_PHASES.WHITELIST_SECURED
-                  ? "translateY(60px)"
+                  ? "translateY(115px)"
                   : "none",
             }}
             onLoad={() => setLogoLoaded(true)}
@@ -909,7 +915,7 @@ const PFPMint = () => {
             opacity: bgLoaded ? 0 : 1,
             transform:
               currentPhase === MINT_PHASES.WHITELIST_SECURED
-                ? "scale(0.4) translateY(-85%)"
+                ? "scale(0.4) translateY(-75%)"
                 : "scale(0.75)",
             transformOrigin: "center center",
             transition: "opacity 0.3s ease",
@@ -925,7 +931,7 @@ const PFPMint = () => {
             opacity: bgLoaded ? 1 : 0,
             transform:
               currentPhase === MINT_PHASES.WHITELIST_SECURED
-                ? "scale(0.4) translateY(-85%)"
+                ? "scale(0.4) translateY(-75%)"
                 : "scale(0.75)",
             transformOrigin: "center center",
             transition: isInitialLoad ? "opacity 0.3s ease" : "all 0.3s ease",
