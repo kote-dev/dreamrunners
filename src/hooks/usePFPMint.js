@@ -10,6 +10,7 @@ import {
   DREAM_LAIR_ABI,
 } from "../contracts/dreamLairConfig";
 import { toast } from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
 
 const usePFPMint = () => {
   const { address } = useAccount();
@@ -17,6 +18,10 @@ const usePFPMint = () => {
   const [error, setError] = useState(null);
   const [generatedImages, setGeneratedImages] = useState([]);
   const [txHash, setTxHash] = useState(null);
+  const [requestId, setRequestId] = useState(null);
+  const [generationStatus, setGenerationStatus] = useState(null);
+  const [statusInterval, setStatusInterval] = useState(null);
+  const [timeoutId, setTimeoutId] = useState(null);
 
   const { writeContractAsync } = useWriteContract();
 
@@ -43,72 +48,115 @@ const usePFPMint = () => {
     },
   });
 
+  const checkGenerationStatus = async (reqId) => {
+    try {
+      console.log(`🔄 Checking status for ${reqId}...`);
+      const response = await fetch(
+        `https://dream-dev.blightfell.com/job_state/${reqId}`
+      );
+      const data = await response.json();
+      console.log(`🔍 Raw status response for ${reqId}:`, data);
+      setGenerationStatus(data);
+      return data;
+    } catch (err) {
+      console.error(`❌ Status check failed for ${reqId}:`, err);
+      return null;
+    }
+  };
+
   const generateImages = async (prompt) => {
     if (!address) {
-      toast.error("Please connect your wallet first", {
-        position: "top-center",
-        style: {
-          background: "#fff",
-          color: "#333",
-          padding: "16px",
-          borderRadius: "8px",
-        },
-      });
+      toast.error("Please connect your wallet first");
       return;
     }
 
-    console.log("🚀 Generating images for prompt:", prompt);
-    console.log("👛 Using wallet address:", address);
+    const reqId = uuidv4();
+    console.log(`🎨 Starting generation ${reqId} for ${address}`);
+    setRequestId(reqId);
     setIsLoading(true);
     setError(null);
 
+    // Start polling immediately
+    const interval = setInterval(async () => {
+      console.log(
+        `⏱️ Polling tick for ${reqId} at ${new Date().toLocaleTimeString()}`
+      );
+      const status = await checkGenerationStatus(reqId);
+      console.log(`📊 Status state:`, status?.state, "Full status:", status);
+
+      if (status?.state?.toUpperCase() === "COMPLETED") {
+        console.log(`✨ Generation completed for ${reqId}`);
+        clearInterval(interval);
+        setIsLoading(false);
+      } else if (status?.state?.toUpperCase() === "FAILED") {
+        console.error(`❌ Generation failed:`, status);
+        clearInterval(interval);
+        setIsLoading(false);
+        setError(status.error || "Generation failed");
+      }
+    }, 2000);
+    setStatusInterval(interval);
+
+    // Store timeout reference
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      if (isLoading) {
+        console.error(`⏰ Generation ${reqId} timed out`);
+        setIsLoading(false);
+        setError("Generation timed out");
+      }
+    }, 300000);
+    setTimeoutId(timeout);
+
+    // Make the initial request after starting polling
     const requestBody = {
       prompt,
       wallet_address: address,
+      request_id: reqId,
     };
-    console.log("📤 Sending request with body:", requestBody);
 
     try {
+      console.log(`📤 Sending request:`, requestBody);
       const response = await fetch(
         "https://dream-dev.blightfell.com/get_dreamrunner",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
         }
       );
 
-      console.log("📡 Response status:", response.status);
-      console.log("📡 Response headers:", Object.fromEntries(response.headers));
-
       if (!response.ok) {
+        clearInterval(interval);
+        const errorData = await response.json().catch(() => null);
+        console.error(`❌ API error (${response.status}):`, errorData);
         throw new Error(
-          `Failed to generate images: ${response.status} ${response.statusText}`
+          errorData?.message || `Generation failed: ${response.status}`
         );
       }
 
-      const data = await response.json();
-      console.log("📦 Response data:", data);
+      // Handle the initial response with images
+      const responseData = await response.json();
+      console.log(`📥 Initial response with images:`, responseData);
 
-      const imageArray = data.images.map((item) => ({
-        image: `data:image/png;base64,${item.image}`,
-        uuid: item.uuid,
-        signature: item.signature,
-      }));
-
-      setGeneratedImages(imageArray);
+      if (responseData.images) {
+        console.log(`🖼️ Received ${responseData.images.length} images`);
+        const imageArray = responseData.images.map((item) => ({
+          image: `data:image/png;base64,${item.image}`,
+          uuid: item.uuid,
+          signature: item.signature,
+        }));
+        setGeneratedImages(imageArray);
+        clearInterval(interval); // Clear polling since we got images
+        setStatusInterval(null); // Clear the interval reference
+        setIsLoading(false);
+      }
     } catch (err) {
-      console.error("❌ Detailed error info:", {
-        name: err.name,
-        message: err.message,
-        cause: err.cause,
-        stack: err.stack,
-      });
+      clearInterval(interval);
+      console.error(`❌ Generation error:`, err);
       setError(err.message);
-    } finally {
       setIsLoading(false);
+      return null;
     }
   };
 
@@ -141,6 +189,25 @@ const usePFPMint = () => {
     }
   };
 
+  const resetState = () => {
+    // Clear any existing intervals/timeouts
+    if (statusInterval) {
+      clearInterval(statusInterval);
+      setStatusInterval(null);
+    }
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
+    setIsLoading(false);
+    setError(null);
+    setGeneratedImages([]);
+    setTxHash(null);
+    setRequestId(null);
+    setGenerationStatus(null);
+  };
+
   return {
     isLoading,
     isMinting,
@@ -151,6 +218,8 @@ const usePFPMint = () => {
     clearImages,
     mintDreamrunner,
     txHash,
+    generationStatus,
+    resetState,
   };
 };
 

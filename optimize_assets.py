@@ -16,6 +16,7 @@ def create_output_dirs(base_output_dir):
         'images/bg',
         'images/dreamrunnerpfp',
         'images/buttons',
+        'images/low_quality',  # New low quality directory
         'videos'
     ]
     for dir in dirs:
@@ -117,6 +118,33 @@ def convert_to_webp(input_path, output_path, quality=85):
         print(f"Error converting to WebP: {e}")
         return False
 
+def create_low_quality_version(input_path, output_dir):
+    """Create a very low quality version for initial loading"""
+    try:
+        img = Image.open(input_path)
+        relative_path = Path(input_path).relative_to('src/assets_full')
+        low_quality_path = Path(output_dir) / 'images/low_quality' / relative_path
+
+        # Create dirs if needed
+        low_quality_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Aggressive size reduction for bg images
+        if 'bg/' in str(input_path).lower():
+            new_width = 640  # Very small for backgrounds
+            ratio = new_width / img.width
+            new_size = (new_width, int(img.height * ratio))
+            img = img.resize(new_size, Image.Resampling.LANCZOS)
+            
+            # Save as very low quality WebP
+            webp_path = low_quality_path.with_suffix('.webp')
+            img.save(str(webp_path), 'WEBP', quality=40)
+
+        print(f"Created low quality version: {low_quality_path}")
+        return True
+    except Exception as e:
+        print(f"Error creating low quality version: {e}")
+        return False
+
 def process_assets(input_dir, output_dir):
     """Process all assets in the input directory"""
     create_output_dirs(output_dir)
@@ -150,6 +178,10 @@ def process_assets(input_dir, output_dir):
                 if key in input_path.lower():
                     max_width = width
                     break
+
+            # Create low quality version for bg images
+            if file.lower().endswith(('.png', '.jpg', '.jpeg')) and 'bg/' in input_path.lower():
+                create_low_quality_version(input_path, output_dir)
 
             # Process based on file type
             if file.lower().endswith(('.png', '.jpg', '.jpeg')):

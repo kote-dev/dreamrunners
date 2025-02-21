@@ -33,6 +33,8 @@ const PFPMint = () => {
     clearImages,
     mintDreamrunner,
     txHash,
+    generationStatus,
+    resetState,
   } = usePFPMint();
   const [currentPhase, setCurrentPhase] = useState(MINT_PHASES.LOADING);
   const [promptText, setPromptText] = useState("");
@@ -43,6 +45,7 @@ const PFPMint = () => {
   const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const [currentImageIndex, setCurrentImageIndex] = useState(1); // Start with middle image
+  const [loadingMessage, setLoadingMessage] = useState("LOADING");
 
   const nextPhase = () => {
     setCurrentPhase((prev) => {
@@ -60,6 +63,16 @@ const PFPMint = () => {
     });
   };
 
+  useEffect(() => {
+    if (generationStatus?.state === "processing") {
+      setLoadingMessage("GENERATING YOUR DREAMRUNNER");
+    } else if (generationStatus?.state === "failed") {
+      setLoadingMessage("GENERATION FAILED");
+      toast.error(generationStatus.error || "Failed to generate images");
+      setCurrentPhase(MINT_PHASES.LOADING);
+    }
+  }, [generationStatus]);
+
   const handleGenerate = async () => {
     if (!isConnected) {
       toast.error("Please connect your wallet first", {
@@ -73,10 +86,29 @@ const PFPMint = () => {
       });
       return;
     }
-    if (!promptText.trim()) return;
-    console.log("🎨 Starting generation with prompt:", promptText);
+    if (!promptText.trim()) {
+      toast.error("Please enter a prompt", {
+        position: "top-center",
+        style: {
+          background: "#fff",
+          color: "#333",
+          padding: "16px",
+          borderRadius: "8px",
+        },
+      });
+      return;
+    }
+
     setCurrentPhase(MINT_PHASES.LOADING_WITH_FLAMES);
-    await generateImages(promptText);
+    setLoadingMessage("STARTING GENERATION");
+
+    try {
+      await generateImages(promptText);
+    } catch (err) {
+      console.error("Generation failed:", err);
+      toast.error(err.message || "Failed to generate images");
+      setCurrentPhase(MINT_PHASES.LOADING);
+    }
   };
 
   const handleConfirm = () => {
@@ -431,8 +463,8 @@ const PFPMint = () => {
               <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
                 <button
                   onClick={() => {
+                    resetState();
                     setCurrentPhase(MINT_PHASES.LOADING);
-                    clearImages();
                     setPromptText("");
                     setSelectedRunner(null);
                     setConfirmedImage(null);
@@ -460,6 +492,7 @@ const PFPMint = () => {
       case MINT_PHASES.PAYMENT:
         return (
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 px-4 mt-[80px] md:mt-[120px]">
+            {/* Left side - Image */}
             <div className="flex justify-center items-center relative z-[2]">
               <div
                 className="relative w-[300px] md:w-[250px] h-auto"
@@ -487,33 +520,36 @@ const PFPMint = () => {
               </div>
             </div>
 
-            <h2
-              className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
-              style={gradientTextStyle}
-            >
-              MINT YOUR DREAMRUNNER
-            </h2>
+            {/* Right side - Text and Button */}
+            <div className="flex flex-col items-center gap-4">
+              <h2
+                className="text-xs md:text-lg !font-[AveriaSerifLibre-Bold] text-[#858585]"
+                style={gradientTextStyle}
+              >
+                MINT YOUR DREAMRUNNER
+              </h2>
 
-            <div className="relative">
-              <img
-                src={IMAGES.dreamrunnerpfp.share}
-                alt="Confirm"
-                className="w-[400px] md:w-[500px] h-auto"
-              />
-              <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
-                <button
-                  onClick={() => handleMint(confirmedImage)}
-                  disabled={isMinting}
-                >
-                  <img
-                    src={IMAGES.dreamrunnerpfp.confirm}
-                    alt="Confirm"
-                    className={`${buttonClasses} ${
-                      isMinting ? "opacity-50" : ""
-                    }`}
-                  />
-                </button>
-                {error && <div className="text-red-500">{error}</div>}
+              <div className="relative">
+                <img
+                  src={IMAGES.dreamrunnerpfp.share}
+                  alt="Confirm"
+                  className="w-[400px] md:w-[500px] h-auto"
+                />
+                <div className="absolute inset-0 flex justify-center items-center gap-20 -translate-y-1">
+                  <button
+                    onClick={() => handleMint(confirmedImage)}
+                    disabled={isMinting}
+                  >
+                    <img
+                      src={IMAGES.dreamrunnerpfp.confirm}
+                      alt="Confirm"
+                      className={`${buttonClasses} ${
+                        isMinting ? "opacity-50" : ""
+                      }`}
+                    />
+                  </button>
+                  {error && <div className="text-red-500">{error}</div>}
+                </div>
               </div>
             </div>
           </div>
@@ -616,9 +652,9 @@ const PFPMint = () => {
         );
       case MINT_PHASES.WHITELIST_SECURED:
         return (
-          <div className="h-screen flex flex-col items-center justify-center relative overflow-hidden mt-[80px] md:mt-[120px]">
+          <div className="h-screen flex flex-col items-center justify-center relative overflow-hidden mt-[40px] md:mt-[60px]">
             <div
-              className="text-center z-2 text-3xl !font-[AveriaSerifLibre-Bold]"
+              className="text-center z-2 text-3xl !font-[AveriaSerifLibre-Bold] -mt-20"
               style={{
                 background:
                   "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
@@ -630,6 +666,22 @@ const PFPMint = () => {
               }}
             >
               WHITELIST SECURED
+            </div>
+
+            <div
+              className="relative cursor-pointer mt-8"
+              onClick={() => {
+                resetState();
+                setCurrentPhase(MINT_PHASES.LOADING);
+                setPromptText("");
+                setSelectedRunner(null);
+                setConfirmedImage(null);
+              }}
+            >
+              <img src={IMAGES.buttons.blank} alt="" className="h-8 w-auto" />
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia text-xs w-full text-center">
+                MINT AGAIN
+              </span>
             </div>
           </div>
         );
@@ -715,8 +767,20 @@ const PFPMint = () => {
                 textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
               }}
             >
-              LOADING<span className="loading-dots"></span>
+              LOADING
+              <span className="loading-dots"></span>
             </h2>
+
+            {error && (
+              <div
+                className="text-red-500 text-center mt-4"
+                style={{
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                }}
+              >
+                {error}
+              </div>
+            )}
           </div>
         );
       default:
@@ -821,11 +885,18 @@ const PFPMint = () => {
         }}
       />
 
-      {/* Debug Navigation Arrows - Commented out */}
-      {/* <div className="fixed inset-y-0 left-4 flex items-center z-50">
+      {/* Debug Navigation Arrows */}
+      <div className="fixed inset-y-0 left-4 flex items-center z-50">
         <button
           onClick={prevPhase}
-          className="text-white text-4xl opacity-50 hover:opacity-100"
+          className="text-[#fcdfc5] text-2xl opacity-30 hover:opacity-80 transition-opacity"
+          style={{
+            background:
+              "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
+          }}
         >
           ←
         </button>
@@ -833,11 +904,18 @@ const PFPMint = () => {
       <div className="fixed inset-y-0 right-4 flex items-center z-50">
         <button
           onClick={nextPhase}
-          className="text-white text-4xl opacity-50 hover:opacity-100"
+          className="text-[#fcdfc5] text-2xl opacity-30 hover:opacity-80 transition-opacity"
+          style={{
+            background:
+              "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
+          }}
         >
           →
         </button>
-      </div> */}
+      </div>
 
       {/* Phase Content */}
       <div className="flex-1 flex items-center justify-center z-10">
