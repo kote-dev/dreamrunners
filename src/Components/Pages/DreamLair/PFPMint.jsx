@@ -46,6 +46,10 @@ const PFPMint = () => {
   const { openAccountModal } = useAccountModal();
   const [currentImageIndex, setCurrentImageIndex] = useState(1); // Start with middle image
   const [loadingMessage, setLoadingMessage] = useState("LOADING");
+  const [bgLoaded, setBgLoaded] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [textureLoaded, setTextureLoaded] = useState(false);
 
   const nextPhase = () => {
     setCurrentPhase((prev) => {
@@ -72,6 +76,14 @@ const PFPMint = () => {
       setCurrentPhase(MINT_PHASES.LOADING);
     }
   }, [generationStatus]);
+
+  useEffect(() => {
+    // Remove initial load state after component mounts
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleGenerate = async () => {
     if (!isConnected) {
@@ -823,16 +835,35 @@ const PFPMint = () => {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `url(${IMAGES.textures.main.original})`,
+            backgroundImage: `url(${IMAGES.textures.main.preview})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
+            opacity: textureLoaded ? 0 : 1,
           }}
         />
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: `url(${IMAGES.textures.glow})`,
+            backgroundImage: `url(${IMAGES.textures.main.original})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: textureLoaded ? 1 : 0,
+          }}
+        />
+        {/* Preload texture */}
+        <img
+          src={IMAGES.textures.main.original}
+          alt=""
+          style={{ display: "none" }}
+          onLoad={() => setTextureLoaded(true)}
+        />
+
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url(${IMAGES.textures.glow.original})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -842,7 +873,7 @@ const PFPMint = () => {
         />
       </div>
 
-      {/* Background elements - Moved down */}
+      {/* Background elements - With progressive loading */}
       <div className="absolute left-1/2 top-[15%] md:top-[5%] -translate-x-1/2 z-10 flex flex-col items-center w-full">
         <img
           src={IMAGES.dreamrunnerpfp.createFlair}
@@ -853,37 +884,73 @@ const PFPMint = () => {
               currentPhase === MINT_PHASES.WHITELIST_SECURED ? "none" : "block",
           }}
         />
-        <img
-          src={IMAGES.bg.dreamrunnerLogo}
-          alt="Dreamrunner Logo"
-          className="w-full max-w-[500px] h-auto px-4"
-          style={{
-            transform:
-              currentPhase === MINT_PHASES.WHITELIST_SECURED
-                ? "translateY(60px)"
-                : "none",
-          }}
-        />
+        <div className="relative w-full max-w-[500px]">
+          <img
+            src={IMAGES.bg.dreamrunnerLogo.preview}
+            alt="Dreamrunner Logo Preview"
+            className={`w-full h-auto px-4 transition-opacity duration-300 ${
+              logoLoaded ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <img
+            src={IMAGES.bg.dreamrunnerLogo.original}
+            alt="Dreamrunner Logo"
+            className={`w-full h-auto px-4 absolute top-0 left-0 transition-opacity duration-300 ${
+              logoLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              transform:
+                currentPhase === MINT_PHASES.WHITELIST_SECURED
+                  ? "translateY(60px)"
+                  : "none",
+            }}
+            onLoad={() => setLogoLoaded(true)}
+          />
+        </div>
       </div>
 
-      {/* Dreamrunner background - Updated for mobile */}
-      <div
-        className="absolute inset-0 top-[0%] z-0 min-h-screen overflow-visible"
-        style={{
-          backgroundImage: `url(${IMAGES.bg.dreamrunnerBg})`,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
-          opacity: 1,
-          mixBlendMode: "normal",
-          transform:
-            currentPhase === MINT_PHASES.WHITELIST_SECURED
-              ? "scale(0.4) translateY(-85%)"
-              : "scale(0.75)",
-          transformOrigin: "center center",
-          transition: "transform 0.3s ease",
-        }}
-      />
+      {/* Dreamrunner background - With progressive loading */}
+      <div className="absolute inset-0 top-[0%] z-0 min-h-screen overflow-visible">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.preview})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            opacity: bgLoaded ? 0 : 1,
+            transform:
+              currentPhase === MINT_PHASES.WHITELIST_SECURED
+                ? "scale(0.4) translateY(-85%)"
+                : "scale(0.75)",
+            transformOrigin: "center center",
+            transition: "opacity 0.3s ease",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.original})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            opacity: bgLoaded ? 1 : 0,
+            transform:
+              currentPhase === MINT_PHASES.WHITELIST_SECURED
+                ? "scale(0.4) translateY(-85%)"
+                : "scale(0.75)",
+            transformOrigin: "center center",
+            transition: isInitialLoad ? "opacity 0.3s ease" : "all 0.3s ease",
+          }}
+        />
+        {/* Preload bg */}
+        <img
+          src={IMAGES.bg.dreamrunnerBg.original}
+          alt=""
+          style={{ display: "none" }}
+          onLoad={() => setBgLoaded(true)}
+        />
+      </div>
 
       {/* Debug Navigation Arrows */}
       <div className="fixed inset-y-0 left-4 flex items-center z-50">

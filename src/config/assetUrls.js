@@ -5,12 +5,22 @@ export const IMAGES = {
     main: {
       webp: `${S3_BASE_URL}/images/textures/Texture.webp`,
       original: `${S3_BASE_URL}/images/textures/Texture.png`,
+      preview: `${S3_BASE_URL}/images/textures/preview/Texture.png`,
     },
-    glow: `${S3_BASE_URL}/images/bg/glow.webp`,
+    glow: {
+      original: `${S3_BASE_URL}/images/bg/glow.webp`,
+      preview: `${S3_BASE_URL}/images/bg/preview/glow.webp`,
+    },
   },
   bg: {
-    dreamrunnerBg: `${S3_BASE_URL}/images/bg/dreamrunnerbg.png`,
-    dreamrunnerLogo: `${S3_BASE_URL}/images/bg/dreamrunnerlogo.png`,
+    dreamrunnerBg: {
+      original: `${S3_BASE_URL}/images/bg/dreamrunnerbg.png`,
+      preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnerbg.png`,
+    },
+    dreamrunnerLogo: {
+      original: `${S3_BASE_URL}/images/bg/dreamrunnerlogo.png`,
+      preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnerlogo.png`,
+    },
     videobox: {
       webp: `${S3_BASE_URL}/images/bg/videobox.webp`,
       original: `${S3_BASE_URL}/images/bg/videobox.png`,

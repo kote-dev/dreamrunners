@@ -13,14 +13,37 @@ def create_output_dirs(base_output_dir):
     """Create output directory structure"""
     dirs = [
         'images/textures',
+        'images/textures/preview',  # New preview directory
         'images/bg',
+        'images/bg/preview',        # New preview directory
         'images/dreamrunnerpfp',
         'images/buttons',
-        'images/low_quality',  # New low quality directory
         'videos'
     ]
     for dir in dirs:
         Path(f"{base_output_dir}/{dir}").mkdir(parents=True, exist_ok=True)
+
+def create_preview_image(input_path, output_path, max_width=None):
+    """Create a very low quality preview image"""
+    try:
+        img = Image.open(input_path)
+        
+        # Reduce size more aggressively for preview
+        if max_width:
+            ratio = max_width / img.width
+            new_size = (int(img.width * ratio), int(img.height * ratio))
+            img = img.resize(new_size, Image.Resampling.LANCZOS)
+        
+        # Save with very low quality for quick loading
+        if input_path.lower().endswith('.png'):
+            img.save(output_path, 'PNG', optimize=True, quality=1)
+        else:
+            img.save(output_path, 'JPEG', quality=1, optimize=True)
+            
+        print(f"Created preview: {output_path}")
+        
+    except Exception as e:
+        print(f"Error creating preview for {input_path}: {e}")
 
 def optimize_image(input_path, output_path, max_width=None):
     """Optimize image while maintaining higher quality"""
@@ -28,6 +51,13 @@ def optimize_image(input_path, output_path, max_width=None):
         original_size = get_file_size(input_path)
         img = Image.open(input_path)
         
+        # Create preview version for bg and textures
+        if any(x in input_path.lower() for x in ['/bg/', '/textures/']):
+            preview_path = output_path.replace('/bg/', '/bg/preview/')
+            preview_path = preview_path.replace('/textures/', '/textures/preview/')
+            preview_width = max_width // 4 if max_width else None  # Even smaller for preview
+            create_preview_image(input_path, preview_path, preview_width)
+
         # Calculate new dimensions if max_width specified
         if max_width and img.width > max_width:
             ratio = max_width / img.width
@@ -118,33 +148,6 @@ def convert_to_webp(input_path, output_path, quality=85):
         print(f"Error converting to WebP: {e}")
         return False
 
-def create_low_quality_version(input_path, output_dir):
-    """Create a very low quality version for initial loading"""
-    try:
-        img = Image.open(input_path)
-        relative_path = Path(input_path).relative_to('src/assets_full')
-        low_quality_path = Path(output_dir) / 'images/low_quality' / relative_path
-
-        # Create dirs if needed
-        low_quality_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Aggressive size reduction for bg images
-        if 'bg/' in str(input_path).lower():
-            new_width = 640  # Very small for backgrounds
-            ratio = new_width / img.width
-            new_size = (new_width, int(img.height * ratio))
-            img = img.resize(new_size, Image.Resampling.LANCZOS)
-            
-            # Save as very low quality WebP
-            webp_path = low_quality_path.with_suffix('.webp')
-            img.save(str(webp_path), 'WEBP', quality=40)
-
-        print(f"Created low quality version: {low_quality_path}")
-        return True
-    except Exception as e:
-        print(f"Error creating low quality version: {e}")
-        return False
-
 def process_assets(input_dir, output_dir):
     """Process all assets in the input directory"""
     create_output_dirs(output_dir)
@@ -178,10 +181,6 @@ def process_assets(input_dir, output_dir):
                 if key in input_path.lower():
                     max_width = width
                     break
-
-            # Create low quality version for bg images
-            if file.lower().endswith(('.png', '.jpg', '.jpeg')) and 'bg/' in input_path.lower():
-                create_low_quality_version(input_path, output_dir)
 
             # Process based on file type
             if file.lower().endswith(('.png', '.jpg', '.jpeg')):

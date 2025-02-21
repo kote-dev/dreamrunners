@@ -1,22 +1,111 @@
-import React from "react";
-import { IMAGES } from "../../config/assetUrls";
+import React, { useState, useEffect } from "react";
+import { IMAGES, VIDEOS } from "../../config/assetUrls";
 import { Link } from "react-router-dom";
 import { Picture } from "../../Components/Picture";
 
 const Home = () => {
-  const [highQualityLoaded, setHighQualityLoaded] = React.useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [bgLoaded, setBgLoaded] = useState(false);
+  const [textureLoaded, setTextureLoaded] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div
-      className="min-h-screen flex flex-col p-4 min-w-[320px] max-w-[100vw] overflow-x-hidden"
-      style={{
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: "#3B3F3F",
-      }}
-    >
-      <div className="md:absolute top-[3%] md:top-[6%] right-[8%] flex items-center gap-4">
+    <div className="min-h-screen flex flex-col p-4 min-w-[320px] max-w-[100vw] overflow-x-hidden relative bg-[#3B3F3F]">
+      {/* Digital video overlay */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          style={{
+            background: "transparent",
+            mixBlendMode: "soft-light",
+            filter: "brightness(1.2) contrast(1.1)",
+            opacity: "0.15",
+          }}
+        >
+          <source src={VIDEOS.digital} type="video/webm" />
+        </video>
+      </div>
+
+      {/* Background texture */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url(${IMAGES.textures.main.preview})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: textureLoaded ? 0 : 1,
+          }}
+        />
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url(${IMAGES.textures.main.original})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            opacity: textureLoaded ? 1 : 0,
+          }}
+        />
+        {/* Preload texture */}
+        <img
+          src={IMAGES.textures.main.original}
+          alt=""
+          style={{ display: "none" }}
+          onLoad={() => setTextureLoaded(true)}
+        />
+      </div>
+
+      {/* Dreamrunner background - With progressive loading */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.preview})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            opacity: bgLoaded ? 0 : 1,
+            transform: "scale(0.75)",
+            transformOrigin: "center center",
+            transition: "opacity 0.3s ease",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.original})`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            opacity: bgLoaded ? 1 : 0,
+            transform: "scale(0.75)",
+            transformOrigin: "center center",
+            transition: "opacity 0.3s ease",
+          }}
+        />
+        {/* Preload bg */}
+        <img
+          src={IMAGES.bg.dreamrunnerBg.original}
+          alt=""
+          style={{ display: "none" }}
+          onLoad={() => setBgLoaded(true)}
+        />
+      </div>
+
+      <div className="md:absolute top-[3%] md:top-[6%] right-[8%] flex items-center gap-4 z-10">
         <button
           className="relative z-50 cursor-pointer"
           onClick={() => window.open("https://x.com/dreamrunnergg", "_blank")}
@@ -51,24 +140,26 @@ const Home = () => {
         </button>
       </div>
 
-      <div className="flex flex-col items-center justify-center flex-grow">
-        <img
-          src={IMAGES.bg.dreamrunnerLogo.high}
-          alt="Dreamrunner Logo"
-          className={`w-full max-w-[800px] h-auto mb-6 ${
-            highQualityLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoad={() => setHighQualityLoaded(true)}
-          style={{ transition: "opacity 0.3s ease-in" }}
-        />
-        <img
-          src={IMAGES.bg.dreamrunnerLogo.low}
-          alt="Dreamrunner Logo"
-          className={`w-full max-w-[800px] h-auto mb-6 absolute ${
-            highQualityLoaded ? "opacity-0" : "opacity-100"
-          }`}
-          style={{ transition: "opacity 0.3s ease-in" }}
-        />
+      <div className="flex flex-col items-center justify-center flex-grow z-10">
+        <div className="relative w-full max-w-[800px]">
+          <img
+            src={IMAGES.bg.dreamrunnerLogo.preview}
+            alt="Dreamrunner Logo Preview"
+            className={`w-full h-auto mb-6 transition-opacity duration-300 ${
+              logoLoaded ? "opacity-0" : "opacity-100"
+            }`}
+            style={{ transform: "none" }}
+          />
+          <img
+            src={IMAGES.bg.dreamrunnerLogo.original}
+            alt="Dreamrunner Logo"
+            className={`w-full h-auto mb-6 absolute top-0 left-0 transition-opacity duration-300 ${
+              logoLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            style={{ transform: "none" }}
+            onLoad={() => setLogoLoaded(true)}
+          />
+        </div>
 
         <h2
           className="text-[#858585] mb-12 font-averia !font-[AveriaSerifLibre] text-lg md:text-2xl text-center"
@@ -87,14 +178,25 @@ const Home = () => {
           to="/mint/dreamrunner"
           className="group cursor-pointer flex flex-col items-center"
         >
-          <h1 className="text-[#858585] mb-2 font-averia italic !font-[AveriaSerifLibre] text-lg md:text-xl text-center hover:text-[#a0a0a0] transition-all duration-200 group-hover:scale-105 group-hover:text-[#a0a0a0]">
-            Mint Your Dreamrunner
-          </h1>
-          <Picture
-            sources={IMAGES.buttons.titleDecor}
-            alt="Title Decoration"
-            className="w-32 group-hover:opacity-80 transition-all duration-200 group-hover:scale-105"
-          />
+          <div className="relative">
+            <img
+              src={IMAGES.buttons.blank}
+              alt="Mint Button"
+              className="h-12 w-auto transition-all duration-300 transform-gpu hover:scale-105 drop-shadow-[0_0_3px_rgba(0,0,0,0.5)] hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] transform origin-center translate-y-1"
+            />
+            <span
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia italic !font-[AveriaSerifLibre] text-lg md:text-xl text-center whitespace-nowrap translate-y-[-10px]"
+              style={{
+                background:
+                  "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
+              }}
+            >
+              Mint
+            </span>
+          </div>
         </Link>
       </div>
     </div>
