@@ -82,9 +82,17 @@ export const IMAGES = {
     },
   },
   bg: {
+    homebg: {
+      original: `${S3_BASE_URL}/images/bg/homebg.png`,
+      preview: `${S3_BASE_URL}/images/bg/preview/homebg.png`,
+    },
     dreamrunnerBg: {
       original: `${S3_BASE_URL}/images/bg/dreamrunnerbg.png`,
       preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnerbg.png`,
+    },
+    dreamrunnermain: {
+      original: `${S3_BASE_URL}/images/bg/dreamrunnermain.png`,
+      preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnermain.png`,
     },
     dreamrunnerLogo: {
       original: `${S3_BASE_URL}/images/bg/dreamrunnerlogo.png`,
@@ -116,6 +124,7 @@ export const IMAGES = {
     flair: `${S3_BASE_URL}/images/buttons/flair.png`,
     createFlair: `${S3_BASE_URL}/images/buttons/createflair.png`,
     blank: `${S3_BASE_URL}/images/buttons/button_blank.png`,
+    mint2: `${S3_BASE_URL}/images/buttons/mint2.png`,
   },
   dreamrunnerpfp: {
     loading: `${S3_BASE_URL}/images/dreamrunnerpfp/loading.png`,

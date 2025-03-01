@@ -73,32 +73,28 @@ const Home = () => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.preview})`,
+            backgroundImage: `url(${IMAGES.bg.homebg.preview})`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             opacity: bgLoaded ? 0 : 1,
-            transform: "scale(0.75)",
-            transformOrigin: "center center",
             transition: "opacity 0.3s ease",
           }}
         />
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url(${IMAGES.bg.dreamrunnerBg.original})`,
+            backgroundImage: `url(${IMAGES.bg.homebg.original})`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             opacity: bgLoaded ? 1 : 0,
-            transform: "scale(0.75)",
-            transformOrigin: "center center",
             transition: "opacity 0.3s ease",
           }}
         />
         {/* Preload bg */}
         <img
-          src={IMAGES.bg.dreamrunnerBg.original}
+          src={IMAGES.bg.homebg.original}
           alt=""
           style={{ display: "none" }}
           onLoad={() => setBgLoaded(true)}
@@ -142,10 +138,17 @@ const Home = () => {
 
       <div className="flex flex-col items-center justify-center flex-grow z-10">
         <div className="relative w-full max-w-[800px]">
+          <div
+            className="absolute left-[-10%] right-[-10%] top-[5%] bottom-[5%] blur-[30px] opacity-60"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(92, 231, 234, 0.9) 0%, rgba(92, 231, 234, 0.3) 70%, transparent 100%)",
+            }}
+          />
           <img
             src={IMAGES.bg.dreamrunnerLogo.preview}
             alt="Dreamrunner Logo Preview"
-            className={`w-full h-auto mb-6 transition-opacity duration-300 ${
+            className={`w-full h-auto mb-4 transition-opacity duration-300 relative ${
               logoLoaded ? "opacity-0" : "opacity-100"
             }`}
             style={{ transform: "none" }}
@@ -153,7 +156,7 @@ const Home = () => {
           <img
             src={IMAGES.bg.dreamrunnerLogo.original}
             alt="Dreamrunner Logo"
-            className={`w-full h-auto mb-6 absolute top-0 left-0 transition-opacity duration-300 ${
+            className={`w-full h-auto mb-4 absolute top-0 left-0 transition-opacity duration-300 ${
               logoLoaded ? "opacity-100" : "opacity-0"
             }`}
             style={{ transform: "none" }}
@@ -162,7 +165,7 @@ const Home = () => {
         </div>
 
         <h2
-          className="text-[#858585] mb-12 font-averia !font-[AveriaSerifLibre] text-lg md:text-2xl text-center"
+          className="text-[#858585] mb-4 font-averia !font-[AveriaSerifLibre] text-xl md:text-3xl text-center"
           style={{
             background:
               "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
@@ -171,32 +174,41 @@ const Home = () => {
             filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
           }}
         >
-          The bleeding edge of AI x NFTs x Gaming
+          THE BLEEDING EDGE OF AI X NFTS X GAMING
         </h2>
+
+        <img
+          src={IMAGES.buttons.flair}
+          alt="Text Flair"
+          className="h-6 w-auto mb-12 drop-shadow-[0_0_12px_rgba(0,0,0,0.7)]"
+        />
 
         <Link
           to="/mint/dreamrunner"
           className="group cursor-pointer flex flex-col items-center"
         >
-          <div className="relative">
+          <div className="relative mb-4">
             <img
-              src={IMAGES.buttons.blank}
+              src={IMAGES.buttons.mint2}
               alt="Mint Button"
               className="h-12 w-auto transition-all duration-300 transform-gpu hover:scale-105 drop-shadow-[0_0_3px_rgba(0,0,0,0.5)] hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] transform origin-center translate-y-1"
             />
-            <span
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia italic !font-[AveriaSerifLibre] text-lg md:text-xl text-center whitespace-nowrap translate-y-[-10px]"
-              style={{
-                background:
-                  "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
-              }}
-            >
-              Mint
-            </span>
           </div>
+          <p
+            className="text-center text-lg md:text-xl mb-2 font-averia !font-[AveriaSerifLibre]"
+            style={{
+              background:
+                "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
+            }}
+          >
+            GIVE US 30 BUCKS, IT WILL CHANGE YOUR LIFE FOR THE BETTER
+          </p>
+          <p className="text-white text-base md:text-lg opacity-80 font-averia !font-[AveriaSerifLibre]">
+            (or so we assume)
+          </p>
         </Link>
       </div>
     </div>
