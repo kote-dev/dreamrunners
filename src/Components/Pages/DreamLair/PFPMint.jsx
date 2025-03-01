@@ -399,13 +399,9 @@ const PFPMint = () => {
               {[0, 1, 2].map((id) => (
                 <div
                   key={id}
-                  className={`relative w-[300px] md:w-[250px] h-auto ${
+                  className={`group relative w-[300px] md:w-[250px] h-auto ${
                     id !== currentImageIndex ? "hidden md:block" : ""
                   }`}
-                  style={{
-                    filter:
-                      "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
-                  }}
                   onClick={() => {
                     if (images[id]) {
                       setSelectedRunner(id);
@@ -413,22 +409,29 @@ const PFPMint = () => {
                     }
                   }}
                 >
-                  {selectedRunner === id && (
+                  {/* Glow Effect */}
+                  {images[id] && (
                     <div
-                      className="absolute inset-0 z-0"
+                      className={`absolute inset-[-15%] transition-all duration-300 ease-in-out ${
+                        selectedRunner === id
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-100"
+                      }`}
                       style={{
-                        background: `linear-gradient(to right, 
-                          rgba(64,255,220,0) 0%, 
-                          rgba(64,255,220,0.2) 50%, 
-                          rgba(64,255,220,0) 100%
-                        )`,
-                        transform: "scale(1.1)",
-                        filter: "blur(15px)",
-                        animation: "pulse 2s infinite",
+                        background: `radial-gradient(circle, rgba(92, 231, 234, 0.8) 0%, rgba(92, 231, 234, 0.2) 60%, transparent 100%)`,
+                        filter: "blur(20px)",
                       }}
                     />
                   )}
-                  <div className="relative">
+
+                  {/* Image Container */}
+                  <div
+                    className="relative z-10 transform transition-transform duration-300 group-hover:scale-110"
+                    style={{
+                      filter:
+                        "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
+                    }}
+                  >
                     <Picture
                       sources={IMAGES.dreamrunnerpfp.loading}
                       alt="Loading Frame"
