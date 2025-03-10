@@ -98,6 +98,10 @@ export const IMAGES = {
       original: `${S3_BASE_URL}/images/bg/dreamrunnerlogo.png`,
       preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnerlogo.png`,
     },
+    dreamrunnerLogo2: {
+      original: `${S3_BASE_URL}/images/bg/dreamrunnerlogo2.png`,
+      preview: `${S3_BASE_URL}/images/bg/preview/dreamrunnerlogo2.png`,
+    },
     videobox: {
       webp: `${S3_BASE_URL}/images/bg/videobox.webp`,
       original: `${S3_BASE_URL}/images/bg/videobox.png`,

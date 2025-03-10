@@ -219,7 +219,12 @@ const PFPMint = () => {
     textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
   };
 
-  const handleConnect = () => {
+  const handleConnect = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     console.log("🔌 Connect wallet clicked");
     console.log("📱 Current connection status:", isConnected);
     console.log("🏠 Connected address:", address);
@@ -227,7 +232,10 @@ const PFPMint = () => {
     if (isConnected) {
       openAccountModal?.();
     } else {
-      openConnectModal?.();
+      // Add a small delay for mobile browsers
+      setTimeout(() => {
+        openConnectModal?.();
+      }, 100);
     }
   };
 
@@ -575,7 +583,7 @@ const PFPMint = () => {
           <div className="flex flex-col items-center">
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 mt-[80px] md:mt-[120px]">
               <div
-                className="relative w-[200px] md:w-[250px] h-auto"
+                className="relative w-[300px] md:w-[250px] h-auto"
                 style={{
                   filter:
                     "drop-shadow(0 4px 6px rgba(0,0,0,0.9)) drop-shadow(0 1px 3px rgba(0,0,0,0.9))",
@@ -817,7 +825,14 @@ const PFPMint = () => {
       </div>
 
       <div className="absolute top-4 right-4 z-50">
-        <div className="relative cursor-pointer" onClick={handleConnect}>
+        <div
+          className="relative cursor-pointer"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleConnect(e);
+          }}
+        >
           <img src={IMAGES.buttons.blank} alt="" className="h-8 w-auto" />
           <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#858585] font-averia text-xs w-full text-center">
             {isConnected ? "Connected" : "Connect Wallet"}
@@ -926,7 +941,9 @@ const PFPMint = () => {
             opacity: bgLoaded ? 0 : 1,
             transform:
               currentPhase === MINT_PHASES.WHITELIST_SECURED
-                ? "scale(0.4) translateY(-75%)"
+                ? "scale(0.4) translateY(-70%)"
+                : window.innerWidth < 768
+                ? "scale(1)"
                 : "scale(0.75)",
             transformOrigin: "center center",
             transition: "opacity 0.3s ease",
@@ -942,7 +959,9 @@ const PFPMint = () => {
             opacity: bgLoaded ? 1 : 0,
             transform:
               currentPhase === MINT_PHASES.WHITELIST_SECURED
-                ? "scale(0.4) translateY(-75%)"
+                ? "scale(0.4) translateY(-70%)"
+                : window.innerWidth < 768
+                ? "scale(1)"
                 : "scale(0.75)",
             transformOrigin: "center center",
             transition: isInitialLoad ? "opacity 0.3s ease" : "all 0.3s ease",

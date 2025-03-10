@@ -137,16 +137,9 @@ const Home = () => {
       </div>
 
       <div className="flex flex-col items-center justify-center flex-grow z-10">
-        <div className="relative w-full max-w-[800px]">
-          <div
-            className="absolute left-[-10%] right-[-10%] top-[5%] bottom-[5%] blur-[30px] opacity-60"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(92, 231, 234, 0.9) 0%, rgba(92, 231, 234, 0.3) 70%, transparent 100%)",
-            }}
-          />
+        <div className="relative w-full max-w-[900px]">
           <img
-            src={IMAGES.bg.dreamrunnerLogo.preview}
+            src={IMAGES.bg.dreamrunnerLogo2.preview}
             alt="Dreamrunner Logo Preview"
             className={`w-full h-auto mb-4 transition-opacity duration-300 relative ${
               logoLoaded ? "opacity-0" : "opacity-100"
@@ -154,7 +147,7 @@ const Home = () => {
             style={{ transform: "none" }}
           />
           <img
-            src={IMAGES.bg.dreamrunnerLogo.original}
+            src={IMAGES.bg.dreamrunnerLogo2.original}
             alt="Dreamrunner Logo"
             className={`w-full h-auto mb-4 absolute top-0 left-0 transition-opacity duration-300 ${
               logoLoaded ? "opacity-100" : "opacity-0"
@@ -171,7 +164,7 @@ const Home = () => {
               "linear-gradient(180deg, #fcdfc5 0%, #a88d6b 50%, #fcdfc5 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.8))",
+            filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.8))",
           }}
         >
           THE BLEEDING EDGE OF AI X NFTS X GAMING
